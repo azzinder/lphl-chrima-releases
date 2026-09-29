@@ -1,5 +1,5 @@
 <!-- Made for LPHL - lphl.nekten.eu - by Nekten - lphl@nekten.eu - -->
-<img src="https://lphl.nekten.eu/lphl-chrima/assets/assets/images/icon.b45ac49292758cd5d9511055ab2ed326.png" width="96" alt="LPHL FASOULI">
+<img src="assets/images/icon.png" width="96" alt="LPHL FASOULI">
 
 # LPHL FASOULI
 
@@ -13,15 +13,16 @@ currency, including cryptocurrencies and gold; income and expenses with categori
 split transactions; scheduled payments; budgets and reports; receipt photos and scanning; and a book for each year. It
 has its own design and works in Greek and English.
 
-Renamed from LPHL CHRIMA: updates install over it and keep everything. Only the name shown changed; the package,
-data files, sync folder (`LPHLChrima`), download addresses and the online version's path (`/lphl-chrima`) keep the
-old one, so installed apps, their data and sync carry on.
+Renamed from LPHL CHRIMA: updates install over it and keep everything. The name shown and the download files
+(`lphl-fasouli-…`) changed; the packages inside them (Android, pacman, RPM), the data files, the sync folder
+(`LPHLChrima`), the releases repository and the online version's path (`/lphl-chrima`) keep the old name, so
+installed apps, their data and sync carry on.
 
 ## Download
 
 Every push to `main` builds the app for Android, Linux and SailfishOS on GitHub Actions and publishes it here:
 
-**https://github.com/azzinder/LPHL-CHRIMA/releases/tag/lphl-chrima**
+**https://github.com/azzinder/LPHL-FASOULI/releases/tag/lphl-chrima**
 
 Each build is numbered `1.0.<build>` and dated. The release page shows its version, date and the commit it was built
 from; the app shows its version and date at the bottom of **More**, so you can tell whether a device has the latest.
@@ -30,24 +31,24 @@ The same files are also published to the public **https://github.com/azzinder/lp
 (the five newest versions), where the apps look for new versions themselves: see **Updates** under Features.
 
 1. Open that link on your Android phone (sign in to GitHub if the repository is private).
-2. Tap **lphl-chrima.apk** to download it.
+2. Tap **lphl-fasouli.apk** to download it.
 3. Open the downloaded file. Android asks once to allow installing apps from your browser or file manager; allow it.
 4. Tap **Install**. Newer builds install over the old one and keep your data.
 
-**Arch Linux** (x86_64): download `lphl-chrima-x86_64.pacman` and install it with
-`sudo pacman -U lphl-chrima-x86_64.pacman`. It appears as LPHL FASOULI in the applications menu.
+**Arch Linux** (x86_64): download `lphl-fasouli-x86_64.pacman` and install it with
+`sudo pacman -U lphl-fasouli-x86_64.pacman`. It appears as LPHL FASOULI in the applications menu.
 
-**Other Linux** (x86_64): `lphl-chrima-x86_64.AppImage` runs without installing: make it executable
+**Other Linux** (x86_64): `lphl-fasouli-x86_64.AppImage` runs without installing: make it executable
 (`chmod +x`) and start it. It needs FUSE 2 (`fuse2` on Arch).
 
-**SailfishOS** 4.6 or newer: install `lphl-chrima-sailfish-aarch64.rpm` (current phones) or
-`lphl-chrima-sailfish-armv7hl.rpm` (older 32-bit ones), e.g. from the file manager, with "Allow untrusted software"
+**SailfishOS** 4.6 or newer: install `lphl-fasouli-sailfish-aarch64.rpm` (current phones) or
+`lphl-fasouli-sailfish-armv7hl.rpm` (older 32-bit ones), e.g. from the file manager, with "Allow untrusted software"
 on in Settings.
 
 The Linux and SailfishOS versions have everything except receipt photos and scanning and the home-screen widget.
 Their data stays on the computer or phone, in the app's own storage, and syncs with the other devices as usual.
 
-**Online**, from any browser: `lphl-chrima-web.zip` goes on your own Nextcloud server; see
+**Online**, from any browser: `lphl-fasouli-web.zip` goes on your own Nextcloud server; see
 [Online version](#online-version-on-your-nextcloud-server).
 
 Coming from Money Dance: LPHL FASOULI installs as a separate app. In Money Dance, open **More → Backup & data →
@@ -161,9 +162,12 @@ The build history is under **Actions → Build**. Each run also keeps the files 
 - With Nextcloud: type its address and choose **Sign in with Nextcloud**. Its sign-in opens in the browser (through
   Authentik or whatever else Nextcloud signs in with); choose **Grant access** and come back. The app gets an app
   password of its own and looks for the folder your other devices sync with anywhere in your Nextcloud (e.g.
-  `Documents/LPHL-CHRIMA/2026`); if it finds several you choose one, and you can always type another. It withdraws
+  `Documents/LPHL-FASOULI/2026`); if it finds several you choose one, and you can always type another. It withdraws
   that password when you stop syncing on the device (and if you leave the setup before connecting). Other services,
   or a typed username and app password, work as before.
+- If the server stops accepting a device's password ("Wrong username or password", e.g. its app password was removed
+  in Nextcloud), **Sign in again** on the sync screen gives it new sign-in details, with Nextcloud or typed in. They
+  must reach the same folder (checked with the device's encryption key); the folder, the encryption and the data stay.
 - Syncs automatically when the app opens, right after each change, and when the app goes to the background, or on demand
 - Only changes are sent. If the same item was edited on two devices, the most recent edit wins.
   Items deleted on one device and used on another are cleaned up safely.
@@ -218,9 +222,9 @@ The build history is under **Actions → Build**. Each run also keeps the files 
 
 ## Online version (on your Nextcloud server)
 
-For when your phone is not at hand: open `https://your-site/lphl-chrima/` in any browser, sign in with Authentik,
-then type the sync encryption password. The page is in LPHL orange (the House palette) unless you pick other colors
-in Settings for the session. Your data appears as on the phone, and every change goes back to the server
+For when your phone is not at hand: open `https://your-site/lphl-chrima/` in any browser, sign in with Authentik, then
+type the sync encryption password. The page is bright orange (#FF6200, the Dutch national team's) unless you pick
+other colors in Settings for the session. Your data appears as on the phone, and every change goes back to the server
 right away, so the phone has it at its next sync.
 
 - **Sign in with Authentik** opens Nextcloud's own sign-in in a new window (Nextcloud's Login Flow v2): sign in with
@@ -249,8 +253,8 @@ right away, so the phone has it at its next sync.
 
 ### Installing it on the server
 
-`lphl-chrima-web.zip` (in every release) holds the folder `lphl-chrima/`, `SHA256SUMS` (every file's SHA-256, also in
-the release as `lphl-chrima-web.SHA256SUMS`) and two example configurations. The page must be served at `/lphl-chrima/`
+`lphl-fasouli-web.zip` (in every release) holds the folder `lphl-chrima/`, `SHA256SUMS` (every file's SHA-256, also in
+the release as `lphl-fasouli-web.SHA256SUMS`) and two example configurations. The page must be served at `/lphl-chrima/`
 on the **same site** as Nextcloud (browsers only let a page use the WebDAV of its own site). Install it once, and again
 for each new version:
 
@@ -289,7 +293,7 @@ layout falls apart.
 
 **Keep watching the folder.** A changed file in `lphl-chrima/` would see every user's Nextcloud password and
 encryption password as they are typed. Check it against the release with
-`cd /srv/http && sha256sum --quiet -c lphl-chrima-web.SHA256SUMS` (any output means a changed or missing file), and
+`cd /srv/http && sha256sum --quiet -c lphl-fasouli-web.SHA256SUMS` (any output means a changed or missing file), and
 treat any file not in the list, other than `config.json`, as foreign.
 
 ## Run it
@@ -408,7 +412,8 @@ Updates: every release is also published to the public `azzinder/lphl-chrima-rel
 Publishing there needs, once: the public repository `azzinder/lphl-chrima-releases` (created with a README), a
 fine-grained personal access token with **Contents: Read and write** on that repository only, and that token as the
 Actions secret `RELEASES_TOKEN` of this repository (Settings → Secrets and variables → Actions). Without the secret the
-step is skipped. Automatic backups (`src/lib/auto-backup.ts`): `auto-<time>-<random>.bak` in the app's private
+step is skipped. Each build also keeps that repository's README, `LICENSE` and the README's pictures the same as here
+(`.github/scripts/sync-public-repo.sh`, only what changed), so its page and license stay current. Automatic backups (`src/lib/auto-backup.ts`): `auto-<time>-<random>.bak` in the app's private
 `backups/` folder (the Linux versions: the page's IndexedDB), a header and the backup JSON each sealed with AES-256-GCM
 under the space's database key.
 
