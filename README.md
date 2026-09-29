@@ -168,6 +168,8 @@ The build history is under **Actions → Build**. Each run also keeps the files 
 - If the server stops accepting a device's password ("Wrong username or password", e.g. its app password was removed
   in Nextcloud), **Sign in again** on the sync screen gives it new sign-in details, with Nextcloud or typed in. They
   must reach the same folder (checked with the device's encryption key); the folder, the encryption and the data stay.
+- When sync fails (a rejected password, a missing folder, or no connection for more than a day), the home screen,
+  the transactions and every account say so, and open the sync screen to put it right.
 - Syncs automatically when the app opens, right after each change, and when the app goes to the background, or on demand
 - Only changes are sent. If the same item was edited on two devices, the most recent edit wins.
   Items deleted on one device and used on another are cleaned up safely.
