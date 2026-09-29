@@ -1,5 +1,5 @@
 <!-- Made for LPHL - lphl.nekten.eu - by Nekten - lphl@nekten.eu - -->
-<img src="[https://lphl.nekten.eu/lphl-chrima/assets/assets/images/icon.b45ac49292758cd5d9511055ab2ed326.png" width="96" alt="LPHL FASOULI">
+<img src="https://lphl.nekten.eu/lphl-chrima/assets/assets/images/icon.b45ac49292758cd5d9511055ab2ed326.png" width="96" alt="LPHL FASOULI">
 
 # LPHL FASOULI
 
