@@ -55,7 +55,7 @@ Coming from Money Dance: LPHL FASOULI installs as a separate app. In Money Dance
 Back up** and save the file; in LPHL FASOULI use **Restore backup** with that file, then uninstall Money Dance.
 To sync again, connect each device to a new, empty WebDAV folder (the sync folder is now `LPHLChrima/`).
 
-The build history is under **Actions → Build**. Each run also keeps the files as downloadable artifacts.
+The build history is under **Actions → Build**. Its jobs hand their files to the publishing job through a draft release (`build-<number>`, deleted once published), not artifacts, so builds do not fill the account's Actions storage; the build also deletes artifacts older builds left.
 
 <p>
   <img src="docs/screenshots/home.png" width="200" alt="Accounts">
