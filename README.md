@@ -104,6 +104,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   cheque number and amounts: `45` finds 45.00 to 45.99, `45,50` exactly 45.50 (split parts too)
 - Filters by account, type, category (including subcategories and split parts), payee, tag, status, reference /
   cheque number, amount from–to (without sign, in each transaction's currency) and "with attachments"
+- Exclude filters: leave out transactions with some tags (e.g. all but `#UNPAID`), categories (with their
+  subcategories and split parts) or payees
 - Periods by day, week, month, quarter, year or all time, with income, expense and net totals
 
 **Receipts and attachments (Android)**
