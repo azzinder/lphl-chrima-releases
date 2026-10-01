@@ -24,11 +24,19 @@ Every push to `main` builds the app for Android, Linux and SailfishOS on GitHub 
 
 **https://github.com/azzinder/LPHL-FASOULI/releases/tag/lphl-chrima**
 
-Each build is numbered `1.0.<build>` and dated. The release page shows its version, date and the commit it was built
-from; the app shows its version and date at the bottom of **More**, so you can tell whether a device has the latest.
+Each build is numbered `2.0.<build>` and dated (`1.0.<build>` before version 2, which brought the second amount; the
+build number simply continues). The release page shows its version, date and the commit it was built from; the app
+shows its version and date at the bottom of **More**, so you can tell whether a device has the latest.
 
 The same files are also published to the public **https://github.com/azzinder/lphl-chrima-releases/releases**
 (the five newest versions), where the apps look for new versions themselves: see **Updates** under Features.
+
+**Betas**: a push to the `beta` branch builds the same files as a beta, `2.0.<build> beta`, published as a
+prerelease: `lphl-chrima-beta` here and `v2.0.<build>-beta` in the public repository (the three newest stay). Installed
+apps are not offered it; install it by hand where you want to try it. It installs over the regular version and keeps
+the data (the database may change for good, as when updating). A beta build says "beta" next to its version, is
+offered the next betas, and moves on by itself to the next regular version once that is newer. To go back to the
+regular version, uninstall the beta, install the regular one and take the data back from sync or a backup.
 
 1. Open that link on your Android phone (sign in to GitHub if the repository is private).
 2. Tap **lphl-fasouli.apk** to download it.
@@ -77,9 +85,37 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - Net worth across all accounts, converted to your main currency
 - **Hide amounts**: the eye next to the net worth (or an account's balance) turns every amount into blurred dots, on
   every screen and the widget, until tapped again; what you type in, and PDF reports, still show in full
+- **Privacy PIN** (Settings, 4 to 8 digits, beta): showing what is blurred or hidden asks for it; hiding never does.
+  While amounts are blurred, it is also asked before a saved transaction, account, plan or budget opens (their amounts
+  show in full there), and before a backup, CSV, QIF or PDF is made; then not again for five minutes, unless something
+  is hidden again or the app is left. The Collected settings sit behind it (**Locked settings**). Setting it shows a
+  **recovery code** once (e.g. `K7QM-2XPA-9TWE`): write it down, it is the only way to set a new PIN if this one is
+  forgotten. After five wrong tries it waits, longer each time. The PIN and the code are kept as hashes only, on that
+  device, for that space; they are never in a backup, and restoring one leaves what is hidden on the device as it is
 - Accounts in another currency (e.g. a bitcoin wallet) also show their value in the main currency and the rate used;
   their transactions in a cryptocurrency show it too
 - Cleared and reconciled balances, with one-tap reconciliation
+
+**Second amount: Collected**
+- Switch it on in **Settings → Second amount: Collected**: every transaction gets a second amount, **Collected**,
+  beside its amount, like a second version of the accounts kept in parallel (e.g. invoiced 300 €, collected 250 €).
+  Accounts get a second opening balance too
+- Left empty, a second amount counts as nothing in the second version, and the transaction is marked
+  **UNFINISHED** in red, like a tag, until it is filled in (0 is an amount like any other). The filters find
+  unfinished transactions, or leave them out
+- Transfers carry it to the other account (at the transfer's own rate between currencies); split parts have one each,
+  and they must add up to the collected total as well as to the amount. Plans can have one for the transactions they
+  make
+- Both versions side by side: account balances, net worth, the month's and the list's totals, each transaction, day
+  totals and budgets show the collected amount next to the amount (marked with a hand and coin). The button next to
+  the eye hides it at once; **Settings → Show the collected amounts** shows it again (with the privacy PIN, if set).
+  Hidden, it leaves no trace: no field on the forms, no UNFINISHED mark or filter, no version in reports, no column
+  in the PDF or CSV, no button. What it holds is kept as it is
+- Reports and the PDF report can be made from either version; the PDF's transaction list shows both
+- Turning it on with transactions already recorded offers to give them their own amount as collected, or to leave
+  them unfinished
+- Synced, backed up and exported to CSV (a last `Collected` column, which the CSV import reads too). The eye hides it
+  like every amount, and the widget shows the collected net worth while the app shows it
 
 **Books**
 - Transactions and balances are kept in books, e.g. one book per year. Everything recorded before books came in is in
@@ -189,7 +225,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 
 **Home-screen widget (Android)**
 - Net worth, this month's income and expenses (hidden while amounts are hidden in the app), and quick **− Expense** /
-  **+ Income** buttons that open the form
+  **+ Income** buttons that open the form. With second amounts shown in the app, the collected net worth too
 - Drawn natively with plain Android views; updates right after changes in the app
 
 **App**
@@ -225,6 +261,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   shown, with progress and Cancel) and opens the installer, which installs it over the current version and keeps the
   data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux versions open the download
   page
+- Beta builds (see **Betas** under Download) are also offered newer betas, and then the next regular version
 - The automatic backups are encrypted with the key of the space they come from (as unreadable as the database without
   the password, and nothing in them tells the spaces apart); **Backup & data → Automatic backups** lists this space's
   and restores one. The six newest are kept. The online version is updated on its server instead
@@ -370,7 +407,7 @@ The repository tests run on Node's built-in SQLite (`node:sqlite`), so they need
 src/
   app/            screens (Expo Router: every file is a route)
     (tabs)/       Accounts, Transactions, Reports, Budgets, More
-  components/     UI kit, sheets, dialogs, charts, pickers, transaction list
+  components/     UI kit, sheets, dialogs, charts, pickers, transaction list, second amount and UNFINISHED mark
   db/
     schema.ts     migrations (PRAGMA user_version)
     sync-schema.ts  change-tracking tables and triggers used by sync
@@ -396,10 +433,13 @@ assets/images/    icon.svg is the logo; every icon (app, Android layers, notific
                   SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
 .github/workflows/build.yml   builds all of the above on every push to main and publishes the release
 plugins/          config plugins (OpenSSL for the encrypted database)
-app.config.ts     app.json plus the release build's version (1.0.<build>, Android versionCode) and date
+app.config.ts     app.json plus the release build's version (2.0.<build>, Android versionCode) and date
 ```
 
 Money is stored as integers in minor units (cents). Transfers are two linked rows, one per account. Split transactions are a parent row plus one child row per part, and balances only count parent rows.
+The second amount is a column beside the amount (`transactions.amount2`, `accounts.opening_balance2`, `plans.amount2`,
+schema v7), signed like it; NULL is an empty field (0 in the second version, and the transaction unfinished). Older
+versions of the app ignore it when syncing and leave it as it is.
 
 Sync: SQLite triggers record each changed row. On sync, a device downloads the other devices' change batches
 from `LPHLChrima/devices/<id>/` in the cloud folder (eight files at a time), applies them (the newest version of each
@@ -418,9 +458,12 @@ store). With the lock, the key exists only sealed by the password (AES-256-GCM w
 cannot be read without it. Android's own app backup is off, since a restored database could not be opened without its
 key: use **Backup & data** or sync. Attachment files (receipt photos) are not encrypted.
 
-Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v1.0.<build>`, with a
+Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v2.0.<build>`, with a
 `version.json` (version, build, date, the APK's address and size) that the apps read from its latest release
-(`src/lib/updates.ts`); a newer build number is offered. Downloads are taken only from that repository's releases.
+(`src/lib/updates.ts`); a newer build number is offered. Its `version` stays `1.0.<build>`, the only form versions
+before 2 accept, so they still update; `release` (`2.0.<build>`) is the version newer apps show. Betas are
+prereleases (`v2.0.<build>-beta`, never "latest"); each also replaces the `version.json` of the release `beta`
+there, which beta builds (`LPHL_CHANNEL=beta`, `extra.channel` in `app.config.ts`) read besides the latest. Downloads are taken only from that repository's releases.
 Publishing there needs, once: the public repository `azzinder/lphl-chrima-releases` (created with a README), a
 fine-grained personal access token with **Contents: Read and write** on that repository only, and that token as the
 Actions secret `RELEASES_TOKEN` of this repository (Settings → Secrets and variables → Actions). Without the secret the
