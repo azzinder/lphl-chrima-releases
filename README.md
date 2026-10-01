@@ -75,6 +75,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - The home screen groups accounts by type. **Account order** (below the accounts, or long-press an account) moves
   whole groups and the accounts within each group; the order syncs between devices
 - Net worth across all accounts, converted to your main currency
+- **Hide amounts**: the eye next to the net worth (or an account's balance) turns every amount into blurred dots, on
+  every screen and the widget, until tapped again; what you type in, and PDF reports, still show in full
 - Accounts in another currency (e.g. a bitcoin wallet) also show their value in the main currency and the rate used;
   their transactions in a cryptocurrency show it too
 - Cleared and reconciled balances, with one-tap reconciliation
@@ -186,7 +188,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   Nextcloud server.
 
 **Home-screen widget (Android)**
-- Net worth, this month's income and expenses, and quick **− Expense** / **+ Income** buttons that open the form
+- Net worth, this month's income and expenses (hidden while amounts are hidden in the app), and quick **− Expense** /
+  **+ Income** buttons that open the form
 - Drawn natively with plain Android views; updates right after changes in the app
 
 **App**
@@ -212,6 +215,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   back to it, choose **Password** there and type your real password as the new one.
   While the password lock is on, the widget hides amounts.
 - Guided first-run setup, including "I already use LPHL FASOULI on another device"
+- At start, after the logo: **Fasouli** and its saying ("Φασούλι το φασούλι γεμίζει το σακούλι" / "Bean by bean, the
+  sack fills up.") on your chosen color, for about a second
 
 **Updates**
 - The app looks for a new version shortly after it opens and when it comes back, at most twice a day (switch it off,
@@ -386,6 +391,8 @@ modules/
 desktop/          Linux desktop version: Electron around the web build (Arch package and AppImage)
 sailfish/         SailfishOS version: Qt/QML app with a WebView and a small local server (RPM)
 online/           the online version's Apache (.htaccess, Alias) and nginx configuration
+assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop,
+                  SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
 .github/workflows/build.yml   builds all of the above on every push to main and publishes the release
 plugins/          config plugins (OpenSSL for the encrypted database)
 app.config.ts     app.json plus the release build's version (1.0.<build>, Android versionCode) and date
