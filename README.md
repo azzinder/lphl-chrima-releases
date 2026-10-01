@@ -388,7 +388,8 @@ src/
 modules/
   lphl-widget/    the native Android widget (Kotlin, plain RemoteViews) that draws that summary
   lphl-ocr/       on-device OCR for receipts (Kotlin, Tesseract with Greek and English data)
-desktop/          Linux desktop version: Electron around the web build (Arch package and AppImage)
+desktop/          Linux desktop version: Electron around the web build (Arch package and AppImage); its windows
+                  identify as lphl-chrima (desktopName), like its menu entry, so docks and panels show its icon
 sailfish/         SailfishOS version: Qt/QML app with a WebView and a small local server (RPM)
 online/           the online version's Apache (.htaccess, Alias) and nginx configuration
 assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop,
