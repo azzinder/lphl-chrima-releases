@@ -216,7 +216,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   While the password lock is on, the widget hides amounts.
 - Guided first-run setup, including "I already use LPHL FASOULI on another device"
 - At start, after the logo: **Fasouli** and its saying ("Φασούλι το φασούλι γεμίζει το σακούλι" / "Bean by bean, the
-  sack fills up.") on your chosen color, for about a second
+  sack fills up.") on your chosen color, for about two seconds
 
 **Updates**
 - The app looks for a new version shortly after it opens and when it comes back, at most twice a day (switch it off,
