@@ -24,15 +24,16 @@ Every push to `main` builds the app for Android, Linux and SailfishOS on GitHub 
 
 **https://github.com/azzinder/LPHL-FASOULI/releases/tag/lphl-chrima**
 
-Each build is numbered `2.0.<build>` and dated (`1.0.<build>` before version 2, which brought the second amount; the
-build number simply continues). The release page shows its version, date and the commit it was built from; the app
+Each build is numbered `3.0.<build>` and dated (`2.0.<build>` before version 3, which brought the release signing key
+and the sturdier sync and lock, `1.0.<build>` before version 2, which brought the second amount; the build number simply
+continues). The release page shows its version, date and the commit it was built from; the app
 shows its version and date at the bottom of **More**, so you can tell whether a device has the latest.
 
 The same files are also published to the public **https://github.com/azzinder/lphl-chrima-releases/releases**
 (the five newest versions), where the apps look for new versions themselves: see **Updates** under Features.
 
-**Betas**: a push to the `beta` branch builds the same files as a beta, `2.0.<build> beta`, published as a
-prerelease: `lphl-chrima-beta` here and `v2.0.<build>-beta` in the public repository (the three newest stay). Installed
+**Betas**: a push to the `beta` branch builds the same files as a beta, `3.0.<build> beta`, published as a
+prerelease: `lphl-chrima-beta` here and `v3.0.<build>-beta` in the public repository (the three newest stay). Installed
 apps are not offered it; install it by hand where you want to try it. It installs over the regular version and keeps
 the data (the database may change for good, as when updating). A beta build says "beta" next to its version, is
 offered the next betas, and moves on by itself to the next regular version once that is newer. To go back to the
@@ -42,6 +43,11 @@ regular version, uninstall the beta, install the regular one and take the data b
 2. Tap **lphl-fasouli.apk** to download it.
 3. Open the downloaded file. Android asks once to allow installing apps from your browser or file manager; allow it.
 4. Tap **Install**. Newer builds install over the old one and keep your data.
+
+Since build 40 (2.0.40 beta, 3.0.41 regular) the APK is signed with the project's own release key. An app installed
+from an earlier build (signed with the Android debug key) cannot be updated over: back it up or sync it, uninstall it
+once, install the new APK and take the data back. From then on updates install over it again, betas and regular
+versions alike.
 
 **Arch Linux** (x86_64): download `lphl-fasouli-x86_64.pacman` and install it with
 `sudo pacman -U lphl-fasouli-x86_64.pacman`. It appears as LPHL FASOULI in the applications menu.
@@ -193,7 +199,11 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 **Data**
 - Full JSON backup and restore
 - Export to CSV (for spreadsheets, UTF-8 with BOM so Excel shows Greek correctly) and QIF (for other finance apps), for all accounts or a single one
-- CSV import from banks or other apps: guesses Greek and English column names, supports separate debit/credit columns and several date formats
+- CSV import from banks or other apps: guesses Greek and English column names and the date format, supports separate
+  debit/credit columns and a decimal-separator hint, and leaves out rows already recorded (same account, day, amount,
+  payee and reference) unless told otherwise
+- Restoring a backup keeps this device's sync folder, sign-in and privacy state; with sync on, a restore or **Delete
+  all data** reaches every synced device, and the confirmations say so
 - Import a full backup from another Android finance app (`.zip`, or encrypted `.enc` with its password) under
   **More → Backup & data**. Accounts, categories, payees, tags, transfers, splits and archived transactions come
   across and are added to what is already there. The file is opened on the phone; nothing is uploaded.
@@ -212,11 +222,21 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   must reach the same folder (checked with the device's encryption key); the folder, the encryption and the data stay.
 - When sync fails (a rejected password, a missing folder, or no connection for more than a day), the home screen,
   the transactions and every account say so, and open the sync screen to put it right.
-- Syncs automatically when the app opens, right after each change, and when the app goes to the background, or on demand
+- Syncs automatically when the app opens, about two seconds after each change, and when the app goes to the
+  background, or on demand
+- Besides its change batches, each device keeps a compact snapshot of its rows in the folder, so a new device (or an
+  online session) reads the snapshot instead of every batch ever written
 - Only changes are sent. If the same item was edited on two devices, the most recent edit wins.
   Items deleted on one device and used on another are cleaned up safely.
 - A new device can take the cloud copy, or merge its own data. Default categories, payees and tags with the
-  same name become one item, even across Greek and English.
+  same name become one item, even across Greek and English. A device that stops syncing keeps noting what changes,
+  so connecting it again to the same folder works both ways: "Use the cloud data" also brings back what it uploaded
+  earlier, "Combine" keeps what was changed (and deleted) meanwhile.
+- A split transaction or a transfer edited on two devices at once stays whole: one device's edit wins entirely.
+  Two devices starting the same empty folder at the same moment end up sharing one encryption key.
+- A sync file that cannot be read is reported with its path (not as a wrong password), and a change this device
+  cannot apply is skipped and counted on the sync screen instead of blocking every later one. Changes to parts of the
+  data an older app version does not know are kept and applied after the app is updated.
 - End-to-end encrypted: everything is encrypted on the phone (AES-256-GCM) before it is uploaded, with an
   encryption password you choose when you first connect. Other devices need that password to join; the cloud
   service only ever sees encrypted files. The password is not stored anywhere else, so it cannot be recovered.
@@ -241,8 +261,12 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   The lock screen and the home-screen widget follow the chosen colors.
 - Text on colored areas (the net-worth card, main buttons): white, as in the palette, or a color of your own
 - The week can start on Monday or Sunday
-- App lock with Face ID, fingerprint or the device PIN, or with a password
-- The data on the device is encrypted; with the password lock on, it cannot be read without the password
+- App lock with Face ID, fingerprint or the device PIN, or with a password (new locks use 200,000 PBKDF2 rounds).
+  Wrong passwords are counted across restarts: after five, each further one makes the next try wait (30 s, doubling
+  up to an hour), on the lock screen and in the Security sheets alike
+- The data on the device is encrypted; with the password lock on, it cannot be read without the password. On Linux
+  the keys live in the computer's keyring; without one (and always on SailfishOS) they are kept unprotected in the
+  app's data folder, and **Settings → Security & lock** says so (the password lock still keeps the database key sealed)
 - A second password: typing it opens a separate, empty space instead of your data. Nobody can tell whether one is
   set: every space shows the same lock settings (they never say whether a second password is set), a second password
   set inside the second space opens yet another space, the stored lock settings look the same either way, and
@@ -253,6 +277,10 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   unreadable, to whoever can open the Nextcloud account.
   If the lock is turned off inside the second space, that space opens directly and your data stays locked: to get
   back to it, choose **Password** there and type your real password as the new one.
+  The keystore and the file system look the same whether or not a second password exists: every slot's secrets,
+  database file and attachment folder exist from the moment the lock is turned on. The second space starts with only
+  the real one's language, currency and look, never its sync or privacy settings, and replacing or removing a second
+  password also ends that space's sync (its sign-in and encryption key go, its Nextcloud app password is withdrawn).
   While the password lock is on, the widget hides amounts.
 - Guided first-run setup, including "I already use LPHL FASOULI on another device"
 - At start, after the logo: **Fasouli** and its saying ("Φασούλι το φασούλι γεμίζει το σακούλι" / "Bean by bean, the
@@ -266,6 +294,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux versions open the download
   page
 - Beta builds (see **Betas** under Download) are also offered newer betas, and then the next regular version
+- `version.json` carries the APK's SHA-256, and the app checks the download against it before installing
 - The automatic backups are encrypted with the key of the space they come from (as unreadable as the database without
   the password, and nothing in them tells the spaces apart); **Backup & data → Automatic backups** lists this space's
   and restores one. The six newest are kept. The online version is updated on its server instead
@@ -330,7 +359,9 @@ Authentik's forward auth on `/lphl-chrima/`); only a path on the same site is ac
 is taken to be at the root. It is the only file the server should add to the folder. Nextcloud's own paths
 (`/remote.php`, `/index.php/login/v2`, `/login/v2/…`, `/ocs/…`) must stay outside any such gate.
 
-**Content-Security-Policy.** The page loads nothing from other sites and has been checked, with no violations, under:
+**Content-Security-Policy.** `.htaccess`, `apache.conf` and `nginx.conf` send this policy (with
+`X-Content-Type-Options: nosniff`); the page loads nothing from other sites and has been checked, with no violations,
+under it:
 
 ```
 default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self';
@@ -362,6 +393,12 @@ To build the APK yourself, as the GitHub workflow does (needs JDK 17 and the And
 npx expo prebuild --platform android
 cd android && ./gradlew assembleRelease   # → android/app/build/outputs/apk/release/app-release.apk
 ```
+
+A local build without `android/app/release.keystore` is signed with the debug key. The GitHub build signs with the
+project's release key: create it once with `scripts/make-release-keystore.sh` and add the four Actions secrets it
+prints (`ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`); without
+them the build fails, and it also fails if the APK turns out debug-signed. Keep the keystore and its password safe:
+a lost key means every installed app must be uninstalled once more.
 
 For Play Store or App Store builds, use EAS: `npx eas-cli@latest build`.
 
@@ -398,12 +435,15 @@ cp node_modules/sql.js/dist/sql-wasm-browser.* online/.htaccess online-build/lph
 
 ```bash
 npm test            # unit tests: money, dates, recurrence, CSV, receipts, every repository, sync between two devices
-                    # (with attachments), and the Linux versions' database
+                    # (with attachments, snapshots, reconnecting, corrupt files), the lock's keystore shape, and the
+                    # Linux versions' database
 npm run typecheck   # TypeScript
 npm run lint        # ESLint (expo lint)
 ```
 
-The repository tests run on Node's built-in SQLite (`node:sqlite`), so they need Node 22.13 or newer.
+The repository tests run on Node's built-in SQLite (`node:sqlite`), so they need Node 22.13 or newer. The GitHub
+workflow runs them, the typecheck and the lint first (on pull requests only those), builds from `main` and `beta` only,
+and pins its actions and the SailfishOS SDK image to exact versions.
 
 ### Structure
 
@@ -418,10 +458,11 @@ src/
     ids.ts        ids that are unique across devices
     repo/         data access: accounts, books, transactions, categories, payees & tags,
                   plans, budgets, rates, reports, backup, CSV/QIF import & export
-  lib/            pure logic: money, dates, recurrence, CSV, reports, crypto
-  lock/           password lock: config, lock screen, second (empty) space
-  sync/           sync engine (transport-agnostic), WebDAV transport, encryption, provider and credentials,
-                  finding the sync folder in a Nextcloud account
+  lib/            pure logic: money, dates, recurrence, CSV, reports, crypto, the transaction form's rules
+  lock/           password lock: config, lock screen, second (empty) space, padded keystore slots, counted wrong tries
+  sync/           sync engine (transport-agnostic, snapshots, deferred and failed changes), WebDAV transport,
+                  encryption, provider and credentials, finding the sync folder in a Nextcloud account, forgetting a
+                  space's sync
   widget/         summary for the Android home-screen widget (*.android.ts; no-ops elsewhere)
   i18n/           Greek and English strings; guide/ holds the user guide (a small Markdown, read by src/lib/guide.ts)
   state/          app context: database, settings, rates, queries
@@ -436,8 +477,9 @@ online/           the online version's Apache (.htaccess, Alias) and nginx confi
 assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop,
                   SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
 .github/workflows/build.yml   builds all of the above on every push to main and publishes the release
-plugins/          config plugins (OpenSSL for the encrypted database)
-app.config.ts     app.json plus the release build's version (2.0.<build>, Android versionCode) and date
+plugins/          config plugins (OpenSSL for the encrypted database, release signing)
+scripts/          make-release-keystore.sh: the release key and the Actions secrets for it
+app.config.ts     app.json plus the release build's version (3.0.<build>, Android versionCode) and date
 ```
 
 Money is stored as integers in minor units (cents). Transfers are two linked rows, one per account. Split transactions are a parent row plus one child row per part, and balances only count parent rows.
@@ -462,11 +504,12 @@ store). With the lock, the key exists only sealed by the password (AES-256-GCM w
 cannot be read without it. Android's own app backup is off, since a restored database could not be opened without its
 key: use **Backup & data** or sync. Attachment files (receipt photos) are not encrypted.
 
-Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v2.0.<build>`, with a
+Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v3.0.<build>`, with a
 `version.json` (version, build, date, the APK's address and size) that the apps read from its latest release
 (`src/lib/updates.ts`); a newer build number is offered. Its `version` stays `1.0.<build>`, the only form versions
-before 2 accept, so they still update; `release` (`2.0.<build>`) is the version newer apps show. Betas are
-prereleases (`v2.0.<build>-beta`, never "latest"); each also replaces the `version.json` of the release `beta`
+before 2 accept, so they still update (version 2 apps read only 1.0 and 2.0, so they show it too); `release`
+(`3.0.<build>`) is the version apps from version 3 on show. Betas are
+prereleases (`v3.0.<build>-beta`, never "latest"); each also replaces the `version.json` of the release `beta`
 there, which beta builds (`LPHL_CHANNEL=beta`, `extra.channel` in `app.config.ts`) read besides the latest. Downloads are taken only from that repository's releases.
 Publishing there needs, once: the public repository `azzinder/lphl-chrima-releases` (created with a README), a
 fine-grained personal access token with **Contents: Read and write** on that repository only, and that token as the
