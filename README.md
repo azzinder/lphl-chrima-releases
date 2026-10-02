@@ -232,6 +232,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 
 **App**
 - Greek and English (follows the device language by default)
+- A full user guide in the app, in Greek and English (**More → User guide**): every feature, step by step, with a
+  search through all of it, links between its sections, and questions and answers. It works offline
 - Two styles: Classic (teal, rounded) and Modernist (red accent, square, Archivo type; Greek text uses
   Inter Tight because Archivo has no Greek letters). Each in light, dark or system theme.
 - Colors: the style's own colors or one of 12 LPHL palettes (LPHL House, Thermaikos, Vardaris, Garden,
@@ -421,7 +423,7 @@ src/
   sync/           sync engine (transport-agnostic), WebDAV transport, encryption, provider and credentials,
                   finding the sync folder in a Nextcloud account
   widget/         summary for the Android home-screen widget (*.android.ts; no-ops elsewhere)
-  i18n/           Greek and English strings
+  i18n/           Greek and English strings; guide/ holds the user guide (a small Markdown, read by src/lib/guide.ts)
   state/          app context: database, settings, rates, queries
   theme/          colors and spacing
 modules/
