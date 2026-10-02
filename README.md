@@ -85,10 +85,12 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - Net worth across all accounts, converted to your main currency
 - **Hide amounts**: the eye next to the net worth (or an account's balance) turns every amount into blurred dots, on
   every screen and the widget, until tapped again; what you type in, and PDF reports, still show in full
-- **Privacy PIN** (Settings, 4 to 8 digits, beta): showing what is blurred or hidden asks for it; hiding never does.
+- **Privacy PIN** (Settings, 4 to 8 digits): showing what is blurred or hidden asks for it; hiding never does.
   While amounts are blurred, it is also asked before a saved transaction, account, plan or budget opens (their amounts
   show in full there), and before a backup, CSV, QIF or PDF is made; then not again for five minutes, unless something
-  is hidden again or the app is left. The Collected settings sit behind it (**Locked settings**). Setting it shows a
+  is hidden again or the app is left. Until then nothing gives the amounts away: a search for a number looks in the
+  text only, the amount range filter waits for the PIN, and a known payee fills in its category but not its last
+  amount. The Collected settings sit behind it (**Locked settings**). Setting it shows a
   **recovery code** once (e.g. `K7QM-2XPA-9TWE`): write it down, it is the only way to set a new PIN if this one is
   forgotten. After five wrong tries it waits, longer each time. The PIN and the code are kept as hashes only, on that
   device, for that space; they are never in a backup, and restoring one leaves what is hidden on the device as it is
