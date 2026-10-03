@@ -72,6 +72,21 @@ Every package is in the release twice: with the version in its name (`lphl-fasou
 file; the fixed name keeps links such as `…/releases/latest/download/lphl-fasouli.apk` working, and the app's own
 update check uses the versioned one.
 
+These links always lead to the latest regular version (betas never become "latest"), for web pages and scripts:
+
+| Package | Link |
+|---|---|
+| Android | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli.apk |
+| Arch Linux (x86_64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-x86_64.pacman |
+| Other Linux (x86_64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-x86_64.AppImage |
+| SailfishOS (aarch64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-sailfish-aarch64.rpm |
+| SailfishOS (armv7hl) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-sailfish-armv7hl.rpm |
+| Online | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-web.zip |
+| Online, every file's SHA-256 | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-web.SHA256SUMS |
+| Version details | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/version.json |
+
+The release page itself: https://github.com/azzinder/lphl-chrima-releases/releases/latest
+
 Coming from Money Dance: LPHL FASOULI installs as a separate app. In Money Dance, open **More → Backup & data →
 Back up** and save the file; in LPHL FASOULI use **Restore backup** with that file, then uninstall Money Dance.
 To sync again, connect each device to a new, empty WebDAV folder (the sync folder is now `LPHLChrima/`).
@@ -244,6 +259,13 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - A sync file that cannot be read is reported with its path (not as a wrong password), and a change this device
   cannot apply is skipped and counted on the sync screen instead of blocking every later one. Changes to parts of the
   data an older app version does not know are kept and applied after the app is updated.
+- Devices on different versions are pointed out on the sync screen (and in the notice on the main screens, except
+  a newer version outside the online version, whose update the apps offer anyway): **Older
+  version on another device** when changes of the last 30 days from another device left out what this version has
+  (they can look incomplete here; listed by kind and version, which devices from 3.0.47 name in their `head.json`,
+  older ones only counted; **Hide** until it happens again; while Collected is hidden, a device that lacks only its
+  columns is not pointed out), and **Newer version on another device** when another
+  device's changes carry what this one lacks (update this one; online, install the newer version on the server).
 - End-to-end encrypted: everything is encrypted on the phone (AES-256-GCM) before it is uploaded, with an
   encryption password you choose when you first connect. Other devices need that password to join; the cloud
   service only ever sees encrypted files. The password is not stored anywhere else, so it cannot be recovered.
@@ -391,6 +413,16 @@ encryption password as they are typed. Check it against the release with
 `cd /srv/http && sha256sum --quiet -c lphl-fasouli-web.SHA256SUMS` (any output means a changed or missing file), and
 treat any file not in the list, other than `config.json`, as foreign.
 
+**Installing updates by script.** The latest release's `version.json`
+(`https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/version.json`) names the online version
+under `web`: `url` (the versioned zip), `size` and `sha256` (of the zip itself). A script can take the zip from there,
+check it with `sha256sum`, and only then unzip it and check the files with its `SHA256SUMS`. Going through
+`web.url` rather than fetching `…/latest/download/lphl-fasouli-web.zip` beside it keeps the zip and its hash from the
+same version, even if a new one is published in between. Take the version from
+`release` (`3.0.<build>`) or `build`, not from `version`, which stays `1.0.<build>` for old apps. Install a new
+online version together with the apps: devices on an older version than the one that wrote the data leave out what
+they do not know (the sync screen of the newer devices says which device it is).
+
 ## Run it
 
 ```bash
@@ -474,9 +506,9 @@ src/
                   plans, budgets, rates, reports, backup, CSV/QIF import & export
   lib/            pure logic: money, dates, recurrence, CSV, reports, crypto, the transaction form's rules
   lock/           password lock: config, lock screen, second (empty) space, padded keystore slots, counted wrong tries
-  sync/           sync engine (transport-agnostic, snapshots, deferred and failed changes), WebDAV transport,
-                  encryption, provider and credentials, finding the sync folder in a Nextcloud account, forgetting a
-                  space's sync
+  sync/           sync engine (transport-agnostic, snapshots, deferred and failed changes, devices on other
+                  versions), WebDAV transport, encryption, provider and credentials, finding the sync folder in a
+                  Nextcloud account, forgetting a space's sync
   widget/         summary for the Android home-screen widget (*.android.ts; no-ops elsewhere)
   i18n/           Greek and English strings; guide/ holds the user guide (a small Markdown, read by src/lib/guide.ts)
   state/          app context: database, settings, rates, queries
@@ -506,6 +538,9 @@ from `LPHLChrima/devices/<id>/` in the cloud folder (eight files at a time), app
 row wins), repairs references to rows deleted elsewhere, and uploads its own changes as a new batch. Each device only
 writes its own folder, made with its first upload.
 Attachment files are uploaded once to `LPHLChrima/files/<id>` and fetched by the devices that lack them.
+Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47); a row that lacks
+columns this version has comes from an older app, one with columns it lacks from a newer one (`devicesBehind`,
+`newerElsewhere`).
 Every file except `keycheck.json` is encrypted with a key derived from the encryption password (PBKDF2-SHA256,
 150,000 rounds, native on phones). `keycheck.json` holds the salt and a small encrypted marker used to tell a wrong password.
 
@@ -519,7 +554,8 @@ cannot be read without it. Android's own app backup is off, since a restored dat
 key: use **Backup & data** or sync. Attachment files (receipt photos) are not encrypted.
 
 Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v3.0.<build>`, with a
-`version.json` (version, build, date, the APK's address and size) that the apps read from its latest release
+`version.json` (version, build, date, the APK's address, size and SHA-256, and the same for the online version's zip
+under `web`, for installers on the server) that the apps read from its latest release
 (`src/lib/updates.ts`); a newer build number is offered. Its `version` stays `1.0.<build>`, the only form versions
 before 2 accept, so they still update (version 2 apps read only 1.0 and 2.0, so they show it too); `release`
 (`3.0.<build>`) is the version apps from version 3 on show. Betas are
