@@ -40,7 +40,7 @@ offered the next betas, and moves on by itself to the next regular version once 
 regular version, uninstall the beta, install the regular one and take the data back from sync or a backup.
 
 1. Open that link on your Android phone (sign in to GitHub if the repository is private).
-2. Tap **lphl-fasouli.apk** to download it.
+2. Tap **lphl-fasouli-3.0.41.apk** to download it (the version is in the name; `lphl-fasouli.apk` is the same file).
 3. Open the downloaded file. Android asks once to allow installing apps from your browser or file manager; allow it.
 4. Tap **Install**. Newer builds install over the old one and keep your data.
 
@@ -61,9 +61,16 @@ on in Settings.
 
 The Linux and SailfishOS versions have everything except receipt photos and scanning and the home-screen widget.
 Their data stays on the computer or phone, in the app's own storage, and syncs with the other devices as usual.
+On SailfishOS, swiping right anywhere goes back, as in the system's own apps: an arrow follows the finger, and
+whatever is open on top (a dialog, a sheet, a picture) closes first.
 
 **Online**, from any browser: `lphl-fasouli-web.zip` goes on your own Nextcloud server; see
 [Online version](#online-version-on-your-nextcloud-server).
+
+Every package is in the release twice: with the version in its name (`lphl-fasouli-3.0.41.apk`,
+`lphl-fasouli-3.0.41-x86_64.pacman`, …) and under a fixed name without it (`lphl-fasouli.apk`, …). They are the same
+file; the fixed name keeps links such as `…/releases/latest/download/lphl-fasouli.apk` working, and the app's own
+update check uses the versioned one.
 
 Coming from Money Dance: LPHL FASOULI installs as a separate app. In Money Dance, open **More → Backup & data →
 Back up** and save the file; in LPHL FASOULI use **Restore backup** with that file, then uninstall Money Dance.
@@ -264,9 +271,13 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - App lock with Face ID, fingerprint or the device PIN, or with a password (new locks use 200,000 PBKDF2 rounds).
   Wrong passwords are counted across restarts: after five, each further one makes the next try wait (30 s, doubling
   up to an hour), on the lock screen and in the Security sheets alike
-- The data on the device is encrypted; with the password lock on, it cannot be read without the password. On Linux
-  the keys live in the computer's keyring; without one (and always on SailfishOS) they are kept unprotected in the
-  app's data folder, and **Settings → Security & lock** says so (the password lock still keeps the database key sealed)
+- The data on the device is encrypted; with the password lock on, it cannot be read without the password, and neither
+  can the sync sign-in (the Nextcloud password and the encryption key are sealed with the space's database key, which
+  only the password opens; a space's sign-in kept by an earlier version is sealed at that space's first sync after
+  updating). On Linux the keys live in the computer's keyring; without one (and always on SailfishOS) they are kept in
+  the app's data folder, so without the password lock **Settings → Security & lock** warns that they are unprotected.
+  That screen also keeps **Diagnostics** there: the last starts of the app (how they came about and how long they
+  took), when it was hidden or closed, and uncaught errors, for finding problems; nothing in it leaves the device
 - A second password: typing it opens a separate, empty space instead of your data. Nobody can tell whether one is
   set: every space shows the same lock settings (they never say whether a second password is set), a second password
   set inside the second space opens yet another space, the stored lock settings look the same either way, and
@@ -277,10 +288,13 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   unreadable, to whoever can open the Nextcloud account.
   If the lock is turned off inside the second space, that space opens directly and your data stays locked: to get
   back to it, choose **Password** there and type your real password as the new one.
-  The keystore and the file system look the same whether or not a second password exists: every slot's secrets,
-  database file and attachment folder exist from the moment the lock is turned on. The second space starts with only
+  The keystore and the file system look the same whether or not a second password exists: the sync entries exist
+  from the first start, and every slot's secrets, database file and attachment folder from the moment the lock is
+  turned on. The second space starts with only
   the real one's language, currency and look, never its sync or privacy settings, and replacing or removing a second
-  password also ends that space's sync (its sign-in and encryption key go, its Nextcloud app password is withdrawn).
+  password also ends that space's sync (its sign-in and encryption key go; its Nextcloud app password, sealed with
+  that space's key, usually cannot be read to be withdrawn, so nobody holds it any more, and it stays listed in
+  Nextcloud's Devices & sessions until removed there).
   While the password lock is on, the widget hides amounts.
 - Guided first-run setup, including "I already use LPHL FASOULI on another device"
 - At start, after the logo: **Fasouli** and its saying ("Φασούλι το φασούλι γεμίζει το σακούλι" / "Bean by bean, the
