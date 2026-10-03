@@ -33,10 +33,11 @@ The same files are also published to the public **https://github.com/azzinder/lp
 (the five newest versions), where the apps look for new versions themselves: see **Updates** under Features.
 
 **Betas**: a push to the `beta` branch builds the same files as a beta, `3.0.<build> beta`, published as a
-prerelease: `lphl-chrima-beta` here and `v3.0.<build>-beta` in the public repository (the three newest stay). Installed
-apps are not offered it; install it by hand where you want to try it. It installs over the regular version and keeps
-the data (the database may change for good, as when updating). A beta build says "beta" next to its version, is
-offered the next betas, and moves on by itself to the next regular version once that is newer. To go back to the
+prerelease: `lphl-chrima-beta` here and `v3.0.<build>-beta` in the public repository (the three newest stay). The
+apps offer betas only with **Beta versions** on (**Settings → Updates**; on by itself in a beta build, off in a regular
+one); otherwise install one by hand where you want to try it. It installs over the regular version and keeps the data
+(the database may change for good, as when updating). A beta build says "beta" next to its version and, with **Beta
+versions** on, is offered the next betas; it moves on to the next regular version once that is newer. To go back to the
 regular version, uninstall the beta, install the regular one and take the data back from sync or a backup.
 
 1. Open that link on your Android phone (sign in to GitHub if the repository is private).
@@ -324,12 +325,13 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 
 **Updates**
 - The app looks for a new version shortly after it opens and when it comes back, at most twice a day (switch it off,
-  or check now, in **Settings**)
+  or check now, under **Settings → Updates**, also opened by tapping the version at the bottom of **More**)
 - When there is one, it first backs up the data on the device, then offers it: Android downloads it (the size is
   shown, with progress and Cancel) and opens the installer, which installs it over the current version and keeps the
   data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux versions open the download
   page
-- Beta builds (see **Betas** under Download) are also offered newer betas, and then the next regular version
+- **Beta versions** (on the same screen) offers the betas too (see **Betas** under Download): on by itself in a beta
+  build, off in a regular one; off, a beta build is offered only the next regular version
 - `version.json` carries the APK's SHA-256, and the app checks the download against it before installing
 - The automatic backups are encrypted with the key of the space they come from (as unreadable as the database without
   the password, and nothing in them tells the spaces apart); **Backup & data → Automatic backups** lists this space's
