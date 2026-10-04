@@ -245,6 +245,11 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   must reach the same folder (checked with the device's encryption key); the folder, the encryption and the data stay.
 - When sync fails (a rejected password, a missing folder, or no connection for more than a day), the home screen,
   the transactions and every account say so, and open the sync screen to put it right.
+- Each sync asks the server once for the devices' folders with their fingerprints (WebDAV ETags) and, once this device
+  has uploaded a couple of times and the server has shown on its own folder that an upload changes the folder's
+  fingerprint (Nextcloud does; a server that does not, or gives weak ones, is never trusted for this), reads only the
+  folders whose fingerprint changed since it last read them. Everything is read again once a day and on **Sync now**,
+  so the many one-session folders the online version leaves cost the other devices little
 - Syncs automatically when the app opens, about two seconds after each change, and when the app goes to the
   background, or on demand
 - Besides its change batches, each device keeps a compact snapshot of its rows in the folder, so a new device (or an
@@ -380,7 +385,17 @@ for each new version:
   are switched off for the folder). Nothing else to configure.
 - **Apache, the folder elsewhere** (e.g. `/var/www/lphl-chrima`): add the lines of `apache.conf` (an `Alias`) to the
   site's `<VirtualHost>`.
-- **nginx**: add the `location` block of `nginx.conf` to the site's `server { }`, before its other `location`s.
+- **nginx**: add the `location` blocks of `nginx.conf` (the folder, and the address typed without its slash) to the
+  site's `server { }`, before its other `location`s.
+
+All three also compress the bundle, the WebAssembly and the fonts on the way out (Brotli or gzip on Apache, gzip on
+nginx: a first load is 2 to 2.5 MB instead of 6; inside the folder these lists replace the site's own, which seldom
+names these types) and tell browsers what to keep: the page is never cached, so a new version shows at once; the files
+it names carry a hash of their content in their names and are kept for a year; `sql-wasm-browser.js` and `.wasm`,
+which have no hash, are checked with the server at every load (a 304 when unchanged, by the file's date: Apache's
+compressors mark ETags with their name, so those are switched off), so the database loader and its WebAssembly are
+always of one version. The Linux versions' shells keep the hashed files of their own copy the same way and read the
+rest afresh every time; served from the device, they neither compress nor revalidate.
 
 Avoid copying it into Nextcloud's own folder: Nextcloud's integrity check reports it as an extra file and its updates
 may remove it. If Nextcloud runs in Docker, add the same `location` or `Alias` to the web server or proxy in front of it.
@@ -535,10 +550,12 @@ The second amount is a column beside the amount (`transactions.amount2`, `accoun
 schema v7), signed like it; NULL is an empty field (0 in the second version, and the transaction unfinished). Older
 versions of the app ignore it when syncing and leave it as it is.
 
-Sync: SQLite triggers record each changed row. On sync, a device downloads the other devices' change batches
-from `LPHLChrima/devices/<id>/` in the cloud folder (eight files at a time), applies them (the newest version of each
-row wins), repairs references to rows deleted elsewhere, and uploads its own changes as a new batch. Each device only
-writes its own folder, made with its first upload.
+Sync: SQLite triggers record each changed row. On sync, a device lists the other devices' folders under
+`LPHLChrima/devices/` (one PROPFIND, with each folder's ETag), downloads the change batches of those whose ETag
+changed since it last read them (eight files at a time; every folder once a day, on **Sync now**, and until the server
+has proved on the device's own folder that an upload changes the folder's ETag), applies them (the newest version of
+each row wins), repairs references to rows deleted elsewhere, and uploads its own changes as a new batch. Each device
+only writes its own folder, made with its first upload.
 Attachment files are uploaded once to `LPHLChrima/files/<id>` and fetched by the devices that lack them.
 Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47); a row that lacks
 columns this version has comes from an older app, one with columns it lacks from a newer one (`devicesBehind`,
