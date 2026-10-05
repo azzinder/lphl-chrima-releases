@@ -243,6 +243,9 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - If the server stops accepting a device's password ("Wrong username or password", e.g. its app password was removed
   in Nextcloud), **Sign in again** on the sync screen gives it new sign-in details, with Nextcloud or typed in. They
   must reach the same folder (checked with the device's encryption key); the folder, the encryption and the data stay.
+  Until then the device does not send the rejected password again by itself (each try is a failed login at the
+  server, and servers that count them, e.g. with fail2ban, block the address after a few), nor uses it to withdraw
+  it when sync stops; **Sync now** tries once more.
 - When sync fails (a rejected password, a missing folder, or no connection for more than a day), the home screen,
   the transactions and every account say so, and open the sync screen to put it right.
 - Each sync asks the server once for the devices' folders with their fingerprints (WebDAV ETags) and, once this device
