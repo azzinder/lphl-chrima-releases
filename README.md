@@ -268,13 +268,15 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - A sync file that cannot be read is reported with its path (not as a wrong password), and a change this device
   cannot apply is skipped and counted on the sync screen instead of blocking every later one. Changes to parts of the
   data an older app version does not know are kept and applied after the app is updated.
-- Devices on different versions are pointed out on the sync screen (and in the notice on the main screens, except
-  a newer version outside the online version, whose update the apps offer anyway): **Older
-  version on another device** when changes of the last 30 days from another device left out what this version has
-  (they can look incomplete here; listed by kind and version, which devices from 3.0.47 name in their `head.json`,
-  older ones only counted; **Hide** until it happens again; while Collected is hidden, a device that lacks only its
-  columns is not pointed out), and **Newer version on another device** when another
-  device's changes carry what this one lacks (update this one; online, install the newer version on the server).
+- Devices on different versions are pointed out on the sync screen (and in the notice on the main screens, except a
+  newer version outside the online version, whose update the apps offer anyway): **Changes from an older version**
+  when changes of the last 30 days from another device left out what this version has (they can look incomplete here;
+  each device on a line of its own, named by what its `head.json` says: system, model, the online version's browser, a
+  Linux computer's name, and version, the online version's sign-ins that say the same on one line; devices from before
+  3.0.47 say nothing, so they are named by the first characters of their folder and, where the columns they lack tell,
+  as 1.0.x; **Hide** until it happens again; while Collected is hidden, a device that lacks only its columns is not
+  pointed out), and **Newer version on another device** when another device's changes carry what this one lacks
+  (update this one; online, install the newer version on the server).
 - End-to-end encrypted: everything is encrypted on the phone (AES-256-GCM) before it is uploaded, with an
   encryption password you choose when you first connect. Other devices need that password to join; the cloud
   service only ever sees encrypted files. The password is not stored anywhere else, so it cannot be recovered.
@@ -560,9 +562,10 @@ has proved on the device's own folder that an upload changes the folder's ETag),
 each row wins), repairs references to rows deleted elsewhere, and uploads its own changes as a new batch. Each device
 only writes its own folder, made with its first upload.
 Attachment files are uploaded once to `LPHLChrima/files/<id>` and fetched by the devices that lack them.
-Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47); a row that lacks
-columns this version has comes from an older app, one with columns it lacks from a newer one (`devicesBehind`,
-`newerElsewhere`).
+Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47; from 3.0.51 also
+its system, model, the online version's browser and a Linux computer's name, which the Linux shells give at
+`/__about`); a row that lacks columns this version has comes from an older app, one with columns it lacks from a newer
+one (`devicesBehind`, `newerElsewhere`).
 Every file except `keycheck.json` is encrypted with a key derived from the encryption password (PBKDF2-SHA256,
 150,000 rounds, native on phones). `keycheck.json` holds the salt and a small encrypted marker used to tell a wrong password.
 
