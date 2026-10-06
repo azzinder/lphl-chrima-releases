@@ -277,6 +277,23 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   as 1.0.x; **Hide** until it happens again; while Collected is hidden, a device that lacks only its columns is not
   pointed out), and **Newer version on another device** when another device's changes carry what this one lacks
   (update this one; online, install the newer version on the server).
+- The sync screen also lists the folder's devices (**Devices of the folder**): this one first, then every other device
+  that uploaded changes, latest first, named by what its `head.json` says, with its version and its latest upload (the
+  head's `updatedAt`, by that device's clock). A device gets a new folder each time it connects (the online version at
+  each sign-in), and after 3.0.51 its head says when (`joined`). Folders that name the same device (system and browser
+  without their version numbers, model, name) share a line, with the latest one's version, when one ended before the
+  next began; two that overlap are two devices (two phones of one model) and show apart by their folder's name; from
+  before `joined`, only the online version's sign-ins share a line. This device's earlier folders (its former ids, kept
+  across connections, and those that name it and ended before it connected) count on its own line. Those that do not
+  name their device (before 3.0.51) have a line each, by their folder's name, except the online version's sign-ins;
+  devices from before 3.0.47 also give, where the columns their changes lacked tell, 1.0.x, which Hide on the version
+  notice does not forget. Folded under **Older**: lines without changes in the last 30 days, and those that do not
+  name their device whose last upload came before a device of their kind that names itself (any kind for those from
+  before 3.0.47; this device too) connected. A device with nothing to upload still rewrites its `head.json` once when
+  what it says has changed (an update), keeping its batches and its last upload's time; one connected before `joined`
+  stands its first sync since in for it, which it neither writes nor uses to claim folders as its own. Each sync notes what the `head.json` files it reads say (a folder deleted
+  on the server drops off), and a device updated from a version without the list reads every folder once; until then
+  the card says the list follows the next sync.
 - End-to-end encrypted: everything is encrypted on the phone (AES-256-GCM) before it is uploaded, with an
   encryption password you choose when you first connect. Other devices need that password to join; the cloud
   service only ever sees encrypted files. The password is not stored anywhere else, so it cannot be recovered.
@@ -565,7 +582,8 @@ Attachment files are uploaded once to `LPHLChrima/files/<id>` and fetched by the
 Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47; from 3.0.51 also
 its system, model, the online version's browser and a Linux computer's name, which the Linux shells give at
 `/__about`); a row that lacks columns this version has comes from an older app, one with columns it lacks from a newer
-one (`devicesBehind`, `newerElsewhere`).
+one (`devicesBehind`, `newerElsewhere`). What each `head.json` read says, with when it was written (`updatedAt`) and when
+its device connected (`joined`), is noted for the sync screen's device list (`devicesSeen`).
 Every file except `keycheck.json` is encrypted with a key derived from the encryption password (PBKDF2-SHA256,
 150,000 rounds, native on phones). `keycheck.json` holds the salt and a small encrypted marker used to tell a wrong password.
 
