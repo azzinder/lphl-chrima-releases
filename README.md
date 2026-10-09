@@ -311,8 +311,14 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - Greek and English (follows the device language by default)
 - A full user guide in the app, in Greek and English (**More → User guide**): every feature, step by step, with a
   search through all of it, links between its sections, and questions and answers. It works offline
-- Two styles: Classic (teal, rounded) and Modernist (red accent, square, Archivo type; Greek text uses
-  Inter Tight because Archivo has no Greek letters). Each in light, dark or system theme.
+- Three styles: Classic (teal, rounded), Modernist (red accent, square, Archivo type; Greek text uses
+  Inter Tight because Archivo has no Greek letters) and Nocturne (the LPHL site's: always dark, deep blue with a
+  lilac accent and a glow, Inter type). Classic and Modernist in light, dark or system theme.
+- Two looks, as on the LPHL site: Flat, or Glass in two kinds: Panes (cards as panes of glass over a wallpaper
+  tinted with the chosen color, as on the LPHL admin panel's Home) or One pane (each screen on one frosted pane over
+  that wallpaper, as on the site, its cards lighter wells in it). Text colors that would not read somewhere on their
+  ground take a deeper or lighter shade throughout; browsers also blur what lies under the bars and sheets, elsewhere
+  sheets and dialogs are nearly opaque
 - Colors: the style's own colors or one of 12 LPHL palettes (LPHL House, Thermaikos, Vardaris, Garden,
   Terracotta, Oil lamp, Vesper, Modernist, Peach, Pistachio, Sky blue, Lilac), each with a light and dark version.
   The lock screen and the home-screen widget follow the chosen colors.
@@ -367,8 +373,9 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 ## Online version (on your Nextcloud server)
 
 For when your phone is not at hand: open `https://your-site/lphl-chrima/` in any browser, sign in with Authentik, then
-type the sync encryption password. The page is bright orange (#FF6200, the Dutch national team's) unless you pick
-other colors in Settings for the session. Your data appears as on the phone, and every change goes back to the server
+type the sync encryption password. The page looks the way the site's **Appearance ◐** menu says (style, look,
+theme, palette; own colors give their accent) and follows it when it changes there; with nothing chosen there it is
+bright orange (#FF6200, the Dutch national team's). Changes in Settings last for the session. Your data appears as on the phone, and every change goes back to the server
 right away, so the phone has it at its next sync.
 
 - **Sign in with Authentik** opens Nextcloud's own sign-in in a new window (Nextcloud's Login Flow v2): sign in with
@@ -385,8 +392,8 @@ right away, so the phone has it at its next sync.
   under a path). The sign-in page fills that address in (see `config.json` below).
 - Nothing is kept in the browser: the data is downloaded into the page's memory, and the login and keys live only
   there. **More → Sign out** (or closing or reloading the page) leaves nothing behind. After 15 minutes without use it
-  signs out by itself, first hiding the data and uploading anything still waiting; the browser asks before the page is
-  closed with changes not yet uploaded.
+  signs out by itself, first hiding the data and uploading anything still waiting (measured by the clock, so time asleep
+  or in the background counts too); the browser asks before the page is closed with changes not yet uploaded.
 - Decryption happens in the browser: the server still only stores and sends encrypted files. Use a Nextcloud app
   password (**Settings → Security → Devices & sessions**), which you can revoke at any time.
 - The page talks only to its own site: exchange rates arrive from the phone through sync (or are typed in), never from
@@ -394,6 +401,14 @@ right away, so the phone has it at its next sync.
 - Not there: receipt photos, reminders, the widget, updates and the password lock (there is nothing stored to lock).
   Each browser session that changes something appears to the other devices as one more device (a small folder under
   `LPHLChrima/devices/`).
+- **As an app (PWA).** The page can be installed with its own icon and window: Chrome or Edge (**Install app**, or the
+  install icon in the address bar), an iPhone or iPad (**Share → Add to Home Screen**), Safari on a Mac (**File → Add
+  to Dock**). The build adds a web app manifest (`manifest.json`, scope `/lphl-chrima/`, standalone) and its icons
+  (`online/pwa/`, named in the page by `online/add-pwa.sh`), and no service worker: none is needed to install, and it
+  would keep the app in the browser. The manifest is fetched with the site's cookies (`crossorigin="use-credentials"`),
+  so it also loads behind a sign-in gate. The browser keeps only the name, icon and address; the SailfishOS browser
+  cannot install it. Where an app of the same site already covers `/lphl-chrima/` (the LPHL portal's, scope `/`),
+  Chrome and Edge offer to open the page in that app instead of installing it; Safari is not affected.
 
 ### Installing it on the server
 
@@ -416,8 +431,9 @@ names these types) and tell browsers what to keep: the page is never cached, so 
 it names carry a hash of their content in their names and are kept for a year; `sql-wasm-browser.js` and `.wasm`,
 which have no hash, are checked with the server at every load (a 304 when unchanged, by the file's date: Apache's
 compressors mark ETags with their name, so those are switched off), so the database loader and its WebAssembly are
-always of one version. The Linux versions' shells keep the hashed files of their own copy the same way and read the
-rest afresh every time; served from the device, they neither compress nor revalidate.
+always of one version; so are the app manifest and its icons, so an installed app takes a new one. The Linux versions'
+shells keep the hashed files of their own copy the same way and read the rest afresh every time; served from the
+device, they neither compress nor revalidate.
 
 Avoid copying it into Nextcloud's own folder: Nextcloud's integrity check reports it as an extra file and its updates
 may remove it. If Nextcloud runs in Docker, add the same `location` or `Alias` to the web server or proxy in front of it.
@@ -509,11 +525,13 @@ cd sailfish && mb2 -t SailfishOS-4.6.0.13-aarch64 build                     # �
 
 The web build with `EXPO_PUBLIC_SHELL=web`, served under `/lphl-chrima` (`LPHL_WEB_BASE`, see `app.config.ts`).
 `src/lib/online.ts` keeps its database (sql.js) and secrets in memory only and reads the optional `config.json`;
-`online/` has the server configuration. The build also writes `SHA256SUMS` for the folder.
+`online/` has the server configuration; `online/add-pwa.sh` adds the web app manifest and its icons. The build also
+writes `SHA256SUMS` for the folder.
 
 ```bash
 LPHL_WEB_BASE=/lphl-chrima EXPO_PUBLIC_SHELL=web npx expo export --platform web --output-dir online-build/lphl-chrima
 cp node_modules/sql.js/dist/sql-wasm-browser.* online/.htaccess online-build/lphl-chrima/
+online/add-pwa.sh online-build/lphl-chrima /lphl-chrima
 ```
 
 ## Develop
@@ -551,16 +569,17 @@ src/
   widget/         summary for the Android home-screen widget (*.android.ts; no-ops elsewhere)
   i18n/           Greek and English strings; guide/ holds the user guide (a small Markdown, read by src/lib/guide.ts)
   state/          app context: database, settings, rates, queries
-  theme/          colors and spacing
+  theme/          colors, spacing and the looks (flat, glass)
 modules/
   lphl-widget/    the native Android widget (Kotlin, plain RemoteViews) that draws that summary
   lphl-ocr/       on-device OCR for receipts (Kotlin, Tesseract with Greek and English data)
 desktop/          Linux desktop version: Electron around the web build (Arch package and AppImage); its windows
                   identify as lphl-chrima (desktopName), like its menu entry, so docks and panels show its icon
 sailfish/         SailfishOS version: Qt/QML app with a WebView and a small local server (RPM)
-online/           the online version's Apache (.htaccess, Alias) and nginx configuration
+online/           the online version's Apache (.htaccess, Alias) and nginx configuration, and its web app manifest
+                  and icons (pwa/, added by add-pwa.sh)
 assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop,
-                  SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
+                  online app, SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
 .github/workflows/build.yml   builds all of the above on every push to main and publishes the release
 plugins/          config plugins (OpenSSL for the encrypted database, release signing)
 scripts/          make-release-keystore.sh: the release key and the Actions secrets for it
@@ -635,7 +654,10 @@ source code.
 Receipt scanning uses [Tesseract4Android](https://github.com/adaptech-cz/Tesseract4Android) and the Greek and
 English models from [tessdata_fast](https://github.com/tesseract-ocr/tessdata_fast), both under the Apache
 License 2.0. The Linux versions use [sql.js](https://github.com/sql-js/sql.js) (MIT), the desktop one
-[Electron](https://www.electronjs.org/) (MIT) and the SailfishOS one Qt and the Sailfish WebView.
+[Electron](https://www.electronjs.org/) (MIT) and the SailfishOS one Qt and the Sailfish WebView. The typefaces
+[Archivo](https://github.com/Omnibus-Type/Archivo), [Inter Tight](https://github.com/rsms/inter-tight) and
+[Inter](https://github.com/rsms/inter) are under the SIL Open Font License 1.1 (from
+[@expo-google-fonts](https://github.com/expo/google-fonts), MIT).
 
 ## Roadmap
 
