@@ -3,10 +3,10 @@
 
 # LPHL FASOULI
 
-A private, full-featured personal finance app for Android, Linux (Arch Linux and an AppImage), SailfishOS, iOS and
-the web, built with Expo (SDK 57) and React Native. Every feature is free. Data lives on the device in SQLite and syncs
-between your devices through your own cloud storage; an online version on your own Nextcloud server reaches it from
-any browser.
+A private, full-featured personal finance app for Android, Linux (Arch Linux and an AppImage), macOS, SailfishOS, iOS
+and the web, built with Expo (SDK 57) and React Native. Every feature is free. Data lives on the device in SQLite and
+syncs between your devices through your own cloud storage; an online version on your own Nextcloud server reaches it
+from any browser.
 
 LPHL FASOULI (formerly LPHL CHRIMA, and before that Money Dance) keeps all your money in one place: accounts in any
 currency, including cryptocurrencies and gold; income and expenses with categories, payees and tags; transfers and
@@ -20,7 +20,7 @@ installed apps, their data and sync carry on.
 
 ## Download
 
-Every push to `main` builds the app for Android, Linux and SailfishOS on GitHub Actions and publishes it here:
+Every push to `main` builds the app for Android, Linux, macOS and SailfishOS on GitHub Actions and publishes it here:
 
 **https://github.com/azzinder/LPHL-FASOULI/releases/tag/lphl-chrima**
 
@@ -32,13 +32,14 @@ shows its version and date at the bottom of **More**, so you can tell whether a 
 The same files are also published to the public **https://github.com/azzinder/lphl-chrima-releases/releases**
 (the five newest versions), where the apps look for new versions themselves: see **Updates** under Features.
 
-**Betas**: a push to the `beta` branch builds the same files as a beta, `3.0.<build> beta`, published as a
-prerelease: `lphl-chrima-beta` here and `v3.0.<build>-beta` in the public repository (the three newest stay). The
-apps offer betas only with **Beta versions** on (**Settings → Updates**; on by itself in a beta build, off in a regular
-one); otherwise install one by hand where you want to try it. It installs over the regular version and keeps the data
-(the database may change for good, as when updating). A beta build says "beta" next to its version and, with **Beta
-versions** on, is offered the next betas; it moves on to the next regular version once that is newer. To go back to the
-regular version, uninstall the beta, install the regular one and take the data back from sync or a backup.
+**Betas**: a push to the `beta` branch builds the same files (all but the macOS disk image) as a beta,
+`3.0.<build> beta`, published as a prerelease: `lphl-chrima-beta` here and `v3.0.<build>-beta` in the public repository
+(the three newest stay). The apps offer betas only with **Beta versions** on (**Settings → Updates**; on by itself in a
+beta build, off in a regular one); otherwise install one by hand where you want to try it. It installs over the regular
+version and keeps the data (the database may change for good, as when updating). A beta build says "beta" next to its
+version and, with **Beta versions** on, is offered the next betas; it moves on to the next regular version once that is
+newer. To go back to the regular version, uninstall the beta, install the regular one and take the data back from sync
+or a backup.
 
 1. Open that link on your Android phone (sign in to GitHub if the repository is private).
 2. Tap **lphl-fasouli-3.0.41.apk** to download it (the version is in the name; `lphl-fasouli.apk` is the same file).
@@ -56,11 +57,18 @@ versions alike.
 **Other Linux** (x86_64): `lphl-fasouli-x86_64.AppImage` runs without installing: make it executable
 (`chmod +x`) and start it. It needs FUSE 2 (`fuse2` on Arch).
 
+**macOS** 13 (Ventura) or newer, Apple silicon and Intel: open `lphl-fasouli-macos.dmg` and drag LPHL FASOULI to
+Applications (a newer one dragged over it keeps the data). It has no paid Apple signature (signed ad hoc, not notarized),
+so the first time macOS does not open it: close the message, go to System Settings → Privacy & Security, choose
+**Open Anyway** (offered for about an hour after the try) and confirm with your password. Its keys live in the Keychain
+as "LPHL FASOULI Safe Storage"; after each update macOS asks both again (Open Anyway, then the Keychain password):
+choose **Always Allow**. Regular versions only; betas have no disk image.
+
 **SailfishOS** 4.6 or newer: install `lphl-fasouli-sailfish-aarch64.rpm` (current phones) or
 `lphl-fasouli-sailfish-armv7hl.rpm` (older 32-bit ones), e.g. from the file manager, with "Allow untrusted software"
 on in Settings.
 
-The Linux and SailfishOS versions have everything except receipt photos and scanning and the home-screen widget.
+The Linux, macOS and SailfishOS versions have everything except receipt photos and scanning and the home-screen widget.
 Their data stays on the computer or phone, in the app's own storage, and syncs with the other devices as usual.
 On SailfishOS, swiping right anywhere goes back, as in the system's own apps: an arrow follows the finger, and
 whatever is open on top (a dialog, a sheet, a picture) closes first.
@@ -71,15 +79,19 @@ whatever is open on top (a dialog, a sheet, a picture) closes first.
 Every package is in the release twice: with the version in its name (`lphl-fasouli-3.0.41.apk`,
 `lphl-fasouli-3.0.41-x86_64.pacman`, …) and under a fixed name without it (`lphl-fasouli.apk`, …). They are the same
 file; the fixed name keeps links such as `…/releases/latest/download/lphl-fasouli.apk` working, and the app's own
-update check uses the versioned one.
+update check uses the versioned one. The Mac is the exception: its check reads the release `macos`, which holds the
+newest disk image under its fixed name and a `version.json` pointing to that copy.
 
-These links always lead to the latest regular version (betas never become "latest"), for web pages and scripts:
+These links always lead to the latest regular version (betas never become "latest"), for web pages and scripts. The
+macOS one leads to the newest disk image instead, which stays on the last good one if a version's macOS build failed
+or was switched off:
 
 | Package | Link |
 |---|---|
 | Android | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli.apk |
 | Arch Linux (x86_64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-x86_64.pacman |
 | Other Linux (x86_64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-x86_64.AppImage |
+| macOS 13+ (Apple silicon and Intel) | https://github.com/azzinder/lphl-chrima-releases/releases/download/macos/lphl-fasouli-macos.dmg |
 | SailfishOS (aarch64) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-sailfish-aarch64.rpm |
 | SailfishOS (armv7hl) | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-sailfish-armv7hl.rpm |
 | Online | https://github.com/azzinder/lphl-chrima-releases/releases/latest/download/lphl-fasouli-web.zip |
@@ -205,7 +217,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 **Reports**
 - PDF report of a month, quarter, year or everything (in the book shown, for all accounts or one): totals, expenses
   and income by category, month by month, and optionally every transaction. On Android share it as PDF or print it;
-  on Linux the print dialog prints it or saves it as PDF; on SailfishOS it is saved as a page to print elsewhere.
+  on Linux and macOS the print dialog prints it or saves it as PDF; on SailfishOS it is saved as a page to print elsewhere.
   Open it from the PDF button on Reports, or from an account's menu
 - Spending or income by category as a ring chart and ranked list, with drill-down through both levels of subcategories
 - Income vs expenses per month or year, with averages and savings rate
@@ -272,7 +284,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   newer version outside the online version, whose update the apps offer anyway): **Changes from an older version**
   when changes of the last 30 days from another device left out what this version has (they can look incomplete here;
   each device on a line of its own, named by what its `head.json` says: system, model, the online version's browser, a
-  Linux computer's name, and version, the online version's sign-ins that say the same on one line; devices from before
+  computer's name (Linux, Mac), and version, the online version's sign-ins that say the same on one line; devices from before
   3.0.47 say nothing, so they are named by the first characters of their folder and, where the columns they lack tell,
   as 1.0.x; **Hide** until it happens again; while Collected is hidden, a device that lacks only its columns is not
   pointed out), and **Newer version on another device** when another device's changes carry what this one lacks
@@ -330,7 +342,9 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - The data on the device is encrypted; with the password lock on, it cannot be read without the password, and neither
   can the sync sign-in (the Nextcloud password and the encryption key are sealed with the space's database key, which
   only the password opens; a space's sign-in kept by an earlier version is sealed at that space's first sync after
-  updating). On Linux the keys live in the computer's keyring; without one (and always on SailfishOS) they are kept in
+  updating). On Linux the keys live in the computer's keyring, on a Mac in the Keychain ("LPHL FASOULI Safe Storage";
+  if macOS is refused access, the app says to reopen it and choose Always Allow, and keeps nothing unprotected); without
+  a keyring (and always on SailfishOS) they are kept in
   the app's data folder, so without the password lock **Settings → Security & lock** warns that they are unprotected.
   That screen also keeps **Diagnostics** there: the last starts of the app (how they came about and how long they
   took), when it was hidden or closed, and uncaught errors, for finding problems; nothing in it leaves the device
@@ -361,10 +375,13 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   or check now, under **Settings → Updates**, also opened by tapping the version at the bottom of **More**)
 - When there is one, it first backs up the data on the device, then offers it: Android downloads it (the size is
   shown, with progress and Cancel) and opens the installer, which installs it over the current version and keeps the
-  data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux versions open the download
-  page
+  data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux and SailfishOS versions
+  open the download page, the Mac version downloads the new disk image in the browser (`dmg` in `version.json`; it
+  reads only the release `macos`, which each regular version with a disk image refreshes, so a version whose macOS
+  build failed leaves Macs on the last image and its link never breaks)
 - **Beta versions** (on the same screen) offers the betas too (see **Betas** under Download): on by itself in a beta
-  build, off in a regular one; off, a beta build is offered only the next regular version
+  build, off in a regular one; off, a beta build is offered only the next regular version. The Mac has no betas and
+  no such switch
 - `version.json` carries the APK's SHA-256, and the app checks the download against it before installing
 - The automatic backups are encrypted with the key of the space they come from (as unreadable as the database without
   the password, and nothing in them tells the spaces apart); **Backup & data → Automatic backups** lists this space's
@@ -431,9 +448,9 @@ names these types) and tell browsers what to keep: the page is never cached, so 
 it names carry a hash of their content in their names and are kept for a year; `sql-wasm-browser.js` and `.wasm`,
 which have no hash, are checked with the server at every load (a 304 when unchanged, by the file's date: Apache's
 compressors mark ETags with their name, so those are switched off), so the database loader and its WebAssembly are
-always of one version; so are the app manifest and its icons, so an installed app takes a new one. The Linux versions'
-shells keep the hashed files of their own copy the same way and read the rest afresh every time; served from the
-device, they neither compress nor revalidate.
+always of one version; so are the app manifest and its icons, so an installed app takes a new one. The desktop
+(Linux, macOS) and SailfishOS shells keep the hashed files of their own copy the same way and read the rest afresh
+every time; served from the device, they neither compress nor revalidate.
 
 Avoid copying it into Nextcloud's own folder: Nextcloud's integrity check reports it as an extra file and its updates
 may remove it. If Nextcloud runs in Docker, add the same `location` or `Alias` to the web server or proxy in front of it.
@@ -503,9 +520,9 @@ a lost key means every installed app must be uninstalled once more.
 
 For Play Store or App Store builds, use EAS: `npx eas-cli@latest build`.
 
-### Linux versions
+### Linux, macOS and SailfishOS versions
 
-Both run the web build inside a small shell, with `EXPO_PUBLIC_SHELL` telling the app which one (see
+They run the web build inside a small shell, with `EXPO_PUBLIC_SHELL` telling the app which one (see
 `src/lib/shell.ts`). The database is SQLite in WebAssembly ([sql.js](https://github.com/sql-js/sql.js)), kept in the
 page's IndexedDB.
 
@@ -515,11 +532,19 @@ EXPO_PUBLIC_SHELL=electron npx expo export --platform web --output-dir desktop/w
 cp node_modules/sql.js/dist/sql-wasm-browser.* desktop/web/
 cd desktop && npm ci && npx electron-builder --linux pacman AppImage --x64   # → desktop/dist/
 
+# macOS (.dmg, Apple silicon and Intel): the same desktop/web, on a Mac (the workflow uses GitHub's macOS runner)
+cd desktop && npm ci && npx electron-builder --mac dmg --universal   # → desktop/dist/
+
 # SailfishOS (RPM), with the Sailfish SDK (or its Docker image, as the GitHub workflow does)
 EXPO_PUBLIC_SHELL=sailfish npx expo export --platform web --output-dir sailfish/web
 cp node_modules/sql.js/dist/sql-wasm-browser.* sailfish/web/
 cd sailfish && mb2 -t SailfishOS-4.6.0.13-aarch64 build                     # → sailfish/RPMS/
 ```
+
+The workflow builds the disk image only for regular versions (from `main`), and not at all while the repository
+variable `LPHL_MACOS` is `off` (Settings → Secrets and variables → Actions → Variables): macOS runner minutes cost
+several times Linux ones. Its check (`.github/scripts/check-mac-dmg.sh`) mounts the image and starts the app on the
+runner; the screenshot of its first screen is kept for a week as the run's `mac-check` artifact.
 
 ### Online version
 
@@ -573,13 +598,14 @@ src/
 modules/
   lphl-widget/    the native Android widget (Kotlin, plain RemoteViews) that draws that summary
   lphl-ocr/       on-device OCR for receipts (Kotlin, Tesseract with Greek and English data)
-desktop/          Linux desktop version: Electron around the web build (Arch package and AppImage); its windows
-                  identify as lphl-chrima (desktopName), like its menu entry, so docks and panels show its icon
+desktop/          desktop version for Linux and macOS: Electron around the web build (Arch package, AppImage and the
+                  macOS disk image, signed ad hoc); on Linux its windows identify as lphl-chrima (desktopName), like
+                  its menu entry, so docks and panels show its icon
 sailfish/         SailfishOS version: Qt/QML app with a WebView and a small local server (RPM)
 online/           the online version's Apache (.htaccess, Alias) and nginx configuration, and its web app manifest
                   and icons (pwa/, added by add-pwa.sh)
-assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop,
-                  online app, SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
+assets/images/    icon.svg is the logo; every icon (app, Android layers, notification, splash, favicon, desktop and
+                  its Mac icon, online app, SailfishOS, the PDF logo in src/lib/logo.ts) is a PNG made from it
 .github/workflows/build.yml   builds all of the above on every push to main and publishes the release
 plugins/          config plugins (OpenSSL for the encrypted database, release signing)
 scripts/          make-release-keystore.sh: the release key and the Actions secrets for it
@@ -599,8 +625,9 @@ each row wins), repairs references to rows deleted elsewhere, and uploads its ow
 only writes its own folder, made with its first upload.
 Attachment files are uploaded once to `LPHLChrima/files/<id>` and fetched by the devices that lack them.
 Each device's `head.json` also says which app wrote it (`app`: schema, version, kind, from 3.0.47; from 3.0.51 also
-its system, model, the online version's browser and a Linux computer's name, which the Linux shells give at
-`/__about`); a row that lacks columns this version has comes from an older app, one with columns it lacks from a newer
+its system, model, the online version's browser and a computer's name, which the shells give at `/__about`; the
+desktop version on a Mac is the kind `macos`, with macOS's version, the model and chip system_profiler names and the
+computer's name); a row that lacks columns this version has comes from an older app, one with columns it lacks from a newer
 one (`devicesBehind`, `newerElsewhere`). What each `head.json` read says, with when it was written (`updatedAt`) and when
 its device connected (`joined`), is noted for the sync screen's device list (`devicesSeen`).
 Every file except `keycheck.json` is encrypted with a key derived from the encryption password (PBKDF2-SHA256,
@@ -608,17 +635,20 @@ Every file except `keycheck.json` is encrypted with a key derived from the encry
 
 Encryption at rest: every database is encrypted with its own random 256-bit key: SQLCipher on phones (expo-sqlite
 built with SQLCipher; `plugins/with-sqlcipher-openssl.js` ships the OpenSSL library it needs), AES-256-GCM over the
-whole file in the Linux versions (sql.js keeps the working copy in memory). Databases from earlier versions are
+whole file in the Linux, macOS and SailfishOS versions (sql.js keeps the working copy in memory). Databases from earlier versions are
 encrypted the first time they are opened (on phones through a copy that replaces the original only when complete).
-Without a password lock the key is kept in the device's keystore (Android Keystore; on Linux the shell's secret
-store). With the lock, the key exists only sealed by the password (AES-256-GCM with a PBKDF2-SHA256 key), so the data
+Without a password lock the key is kept in the device's keystore (Android Keystore; on Linux and macOS the shell's
+secret store: the keyring, the Keychain). With the lock, the key exists only sealed by the password (AES-256-GCM with a PBKDF2-SHA256 key), so the data
 cannot be read without it. Android's own app backup is off, since a restored database could not be opened without its
 key: use **Backup & data** or sync. Attachment files (receipt photos) are not encrypted.
 
 Updates: every release is also published to the public `azzinder/lphl-chrima-releases` as `v3.0.<build>`, with a
-`version.json` (version, build, date, the APK's address, size and SHA-256, and the same for the online version's zip
-under `web`, for installers on the server) that the apps read from its latest release
-(`src/lib/updates.ts`); a newer build number is offered. Its `version` stays `1.0.<build>`, the only form versions
+`version.json` (version, build, date, the APK's address, size and SHA-256, the same for the online version's zip
+under `web`, for installers on the server, and the macOS disk image's address and size under `dmg`) that the apps read
+from its latest release (`src/lib/updates.ts`); a newer build number is offered. The Mac version reads only the release
+`macos` (`MAC_URL`): the last step of each regular build that made a disk image puts that image there under its fixed
+name, with a `version.json` pointing to it (both uploaded under temporary names first and then renamed, the image
+first, so a failed upload leaves the previous pair). Its `version` stays `1.0.<build>`, the only form versions
 before 2 accept, so they still update (version 2 apps read only 1.0 and 2.0, so they show it too); `release`
 (`3.0.<build>`) is the version apps from version 3 on show. Betas are
 prereleases (`v3.0.<build>-beta`, never "latest"); each also replaces the `version.json` of the release `beta`
@@ -628,7 +658,7 @@ fine-grained personal access token with **Contents: Read and write** on that rep
 Actions secret `RELEASES_TOKEN` of this repository (Settings → Secrets and variables → Actions). Without the secret the
 step is skipped. Each build also keeps that repository's README, `LICENSE` and the README's pictures the same as here
 (`.github/scripts/sync-public-repo.sh`, only what changed), so its page and license stay current. Automatic backups (`src/lib/auto-backup.ts`): `auto-<time>-<random>.bak` in the app's private
-`backups/` folder (the Linux versions: the page's IndexedDB), a header and the backup JSON each sealed with AES-256-GCM
+`backups/` folder (the Linux, macOS and SailfishOS versions: the page's IndexedDB), a header and the backup JSON each sealed with AES-256-GCM
 under the space's database key.
 
 Sync folders per space: the device keeps one mark per space, in the same positions as the password slots and always
@@ -653,8 +683,8 @@ source code.
 
 Receipt scanning uses [Tesseract4Android](https://github.com/adaptech-cz/Tesseract4Android) and the Greek and
 English models from [tessdata_fast](https://github.com/tesseract-ocr/tessdata_fast), both under the Apache
-License 2.0. The Linux versions use [sql.js](https://github.com/sql-js/sql.js) (MIT), the desktop one
-[Electron](https://www.electronjs.org/) (MIT) and the SailfishOS one Qt and the Sailfish WebView. The typefaces
+License 2.0. The Linux, macOS and SailfishOS versions use [sql.js](https://github.com/sql-js/sql.js) (MIT), the desktop
+one (Linux, macOS) [Electron](https://www.electronjs.org/) (MIT) and the SailfishOS one Qt and the Sailfish WebView. The typefaces
 [Archivo](https://github.com/Omnibus-Type/Archivo), [Inter Tight](https://github.com/rsms/inter-tight) and
 [Inter](https://github.com/rsms/inter) are under the SIL Open Font License 1.1 (from
 [@expo-google-fonts](https://github.com/expo/google-fonts), MIT).
