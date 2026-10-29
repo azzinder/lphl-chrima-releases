@@ -1,22 +1,24 @@
 <!-- Made for LPHL - lphl.nekten.eu - by Nekten - lphl@nekten.eu - -->
-<img src="assets/images/icon.png" width="96" alt="LPHL FASOULI">
+<img src="assets/images/icon.png" width="96" alt="Fasouli">
 
-# LPHL FASOULI
+# Fasouli
 
 A private, full-featured personal finance app for Android, Linux (Arch Linux and an AppImage), macOS, SailfishOS, iOS
 and the web, built with Expo (SDK 57) and React Native. Every feature is free. Data lives on the device in SQLite and
 syncs between your devices through your own cloud storage; an online version on your own Nextcloud server reaches it
 from any browser.
 
-LPHL FASOULI (formerly LPHL CHRIMA, and before that Money Dance) keeps all your money in one place: accounts in any
+Fasouli (formerly LPHL FASOULI, before that LPHL CHRIMA, and before that Money Dance) keeps all your money in one place: accounts in any
 currency, including cryptocurrencies and gold; income and expenses with categories, payees and tags; transfers and
 split transactions; scheduled payments; budgets and reports; receipt photos and scanning; and a book for each year. It
 has its own design and works in Greek and English.
 
-Renamed from LPHL CHRIMA: updates install over it and keep everything. The name shown and the download files
-(`lphl-fasouli-…`) changed; the packages inside them (Android, pacman, RPM), the data files, the sync folder
-(`LPHLChrima`), the releases repository and the online version's path (`/lphl-chrima`) keep the old name, so
-installed apps, their data and sync carry on.
+Renamed from LPHL CHRIMA, then from LPHL FASOULI: updates install over it and keep everything. The name shown changed
+(the download files, `lphl-fasouli-…`, changed with the first rename and keep that name); the packages inside them
+(Android, pacman, RPM), the data files, the sync folder (`LPHLChrima`), the releases repository and the online
+version's path (`/lphl-chrima`) keep the first name, so installed apps, their data and sync carry on. The Mac
+version, which nobody had installed yet, was renamed with it: its app file, menu, data folder and Keychain item say
+Fasouli.
 
 ## Download
 
@@ -52,16 +54,16 @@ once, install the new APK and take the data back. From then on updates install o
 versions alike.
 
 **Arch Linux** (x86_64): download `lphl-fasouli-x86_64.pacman` and install it with
-`sudo pacman -U lphl-fasouli-x86_64.pacman`. It appears as LPHL FASOULI in the applications menu.
+`sudo pacman -U lphl-fasouli-x86_64.pacman`. It appears as Fasouli in the applications menu.
 
 **Other Linux** (x86_64): `lphl-fasouli-x86_64.AppImage` runs without installing: make it executable
 (`chmod +x`) and start it. It needs FUSE 2 (`fuse2` on Arch).
 
-**macOS** 13 (Ventura) or newer, Apple silicon and Intel: open `lphl-fasouli-macos.dmg` and drag LPHL FASOULI to
+**macOS** 13 (Ventura) or newer, Apple silicon and Intel: open `lphl-fasouli-macos.dmg` and drag Fasouli to
 Applications (a newer one dragged over it keeps the data). It has no paid Apple signature (signed ad hoc, not notarized),
 so the first time macOS does not open it: close the message, go to System Settings → Privacy & Security, choose
 **Open Anyway** (offered for about an hour after the try) and confirm with your password. Its keys live in the Keychain
-as "LPHL FASOULI Safe Storage"; after each update macOS asks both again (Open Anyway, then the Keychain password):
+as "Fasouli Safe Storage"; after each update macOS asks both again (Open Anyway, then the Keychain password):
 choose **Always Allow**. Regular versions only; betas have no disk image.
 
 **SailfishOS** 4.6 or newer: install `lphl-fasouli-sailfish-aarch64.rpm` (current phones) or
@@ -100,8 +102,8 @@ or was switched off:
 
 The release page itself: https://github.com/azzinder/lphl-chrima-releases/releases/latest
 
-Coming from Money Dance: LPHL FASOULI installs as a separate app. In Money Dance, open **More → Backup & data →
-Back up** and save the file; in LPHL FASOULI use **Restore backup** with that file, then uninstall Money Dance.
+Coming from Money Dance: Fasouli installs as a separate app. In Money Dance, open **More → Backup & data →
+Back up** and save the file; in Fasouli use **Restore backup** with that file, then uninstall Money Dance.
 To sync again, connect each device to a new, empty WebDAV folder (the sync folder is now `LPHLChrima/`).
 
 The build history is under **Actions → Build**. Its jobs hand their files to the publishing job through a draft release (`build-<number>`, deleted once published), not artifacts, so builds do not fill the account's Actions storage; the build also deletes artifacts older builds left.
@@ -245,11 +247,11 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 
 **Sync between devices**
 - Keeps phones and tablets in step, including a partner's phone, through a folder in your own cloud storage.
-  Any WebDAV service works: Nextcloud, Koofr, pCloud, a NAS. There is no LPHL FASOULI server.
+  Any WebDAV service works: Nextcloud, Koofr, pCloud, a NAS. There is no Fasouli server.
 - With Nextcloud: type its address and choose **Sign in with Nextcloud**. Its sign-in opens in the browser (through
   Authentik or whatever else Nextcloud signs in with); choose **Grant access** and come back. The app gets an app
   password of its own and looks for the folder your other devices sync with anywhere in your Nextcloud (e.g.
-  `Documents/LPHL-FASOULI/2026`); if it finds several you choose one, and you can always type another. It withdraws
+  `Documents/Fasouli/2026`); if it finds several you choose one, and you can always type another. It withdraws
   that password when you stop syncing on the device (and if you leave the setup before connecting). Other services,
   or a typed username and app password, work as before.
 - If the server stops accepting a device's password ("Wrong username or password", e.g. its app password was removed
@@ -342,7 +344,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - The data on the device is encrypted; with the password lock on, it cannot be read without the password, and neither
   can the sync sign-in (the Nextcloud password and the encryption key are sealed with the space's database key, which
   only the password opens; a space's sign-in kept by an earlier version is sealed at that space's first sync after
-  updating). On Linux the keys live in the computer's keyring, on a Mac in the Keychain ("LPHL FASOULI Safe Storage";
+  updating). On Linux the keys live in the computer's keyring, on a Mac in the Keychain ("Fasouli Safe Storage";
   if macOS is refused access, the app says to reopen it and choose Always Allow, and keeps nothing unprotected); without
   a keyring (and always on SailfishOS) they are kept in
   the app's data folder, so without the password lock **Settings → Security & lock** warns that they are unprotected.
@@ -366,7 +368,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   that space's key, usually cannot be read to be withdrawn, so nobody holds it any more, and it stays listed in
   Nextcloud's Devices & sessions until removed there).
   While the password lock is on, the widget hides amounts.
-- Guided first-run setup, including "I already use LPHL FASOULI on another device"
+- Guided first-run setup, including "I already use Fasouli on another device"
 - At start, after the logo: **Fasouli** and its saying ("Φασούλι το φασούλι γεμίζει το σακούλι" / "Bean by bean, the
   sack fills up.") on your chosen color, for about two seconds
 
@@ -375,7 +377,7 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   or check now, under **Settings → Updates**, also opened by tapping the version at the bottom of **More**)
 - When there is one, it first backs up the data on the device, then offers it: Android downloads it (the size is
   shown, with progress and Cancel) and opens the installer, which installs it over the current version and keeps the
-  data (the first time Android asks to allow installing apps from LPHL FASOULI); the Linux and SailfishOS versions
+  data (the first time Android asks to allow installing apps from Fasouli); the Linux and SailfishOS versions
   open the download page, the Mac version downloads the new disk image in the browser (`dmg` in `version.json`; it
   reads only the release `macos`, which each regular version with a disk image refreshes, so a version whose macOS
   build failed leaves Macs on the last image and its link never breaks)
@@ -673,7 +675,7 @@ matches.
 
 ## License
 
-LPHL FASOULI is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+Fasouli is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; see [LICENSE](LICENSE).
 Whoever runs a modified version for others over a network, such as the online version, must offer those users its
