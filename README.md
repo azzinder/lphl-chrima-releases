@@ -1,4 +1,9 @@
 <!-- Made for LPHL - lphl.nekten.eu - by Nekten - lphl@nekten.eu - -->
+<!--
+SPDX-FileCopyrightText: 2026 azzinder
+SPDX-License-Identifier: AGPL-3.0-or-later
+Additional terms under AGPL-3.0 section 7 apply: see AUTHORS.md.
+-->
 <img src="assets/images/icon.png" width="96" alt="Fasouli">
 
 # Fasouli
@@ -684,10 +689,14 @@ matches.
 Fasouli is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; see [LICENSE](LICENSE).
+Who makes Fasouli, the role of AI tools and the additional terms of section 7 of the licence (author attribution, marking
+changed versions, the name and logo) are in [AUTHORS.md](AUTHORS.md).
 Whoever runs a modified version for others over a network, such as the online version, must offer those users its
 source code.
 
 ## Third-party components
+
+Every library is listed with its licence in [CREDITS.md](CREDITS.md). In short:
 
 Receipt scanning uses [Tesseract4Android](https://github.com/adaptech-cz/Tesseract4Android) and the Greek and
 English models from [tessdata_fast](https://github.com/tesseract-ocr/tessdata_fast), both under the Apache
