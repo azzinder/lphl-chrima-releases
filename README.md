@@ -211,6 +211,18 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - Templates for frequent entries
 - Recurring plans (daily, weekly, monthly or yearly, every N periods, optional end date)
 - Plans are recorded automatically, or wait for you to apply or skip each one
+- With sync, an automatic plan is recorded once however many devices open that day, once they all run this version:
+  each waits for its sync pass first, and an occurrence has the same ids on every device. A device with no connection
+  records it from the plan as it knows it, and never undoes an edit or deletion made elsewhere, of it or of the plan;
+  a deleted one is not recorded again unless a change to the plan makes it due again (as restoring a backup does). A
+  device that has not heard yet that the plan's day or repetition changed, or that it changed between a transfer and
+  an expense or income, records it as it knew it, so both may stay: delete the one you do not want
+- Doubles that devices on older versions record are merged after the next sync pass: of exact copies nobody changed,
+  one is kept (written again under new ids) and the others deleted. A changed one stays, and so may its double and
+  copies that cannot be told from real transactions. What was changed or deleted by hand on a device that had not
+  synced yet counts over the merge, except a status an older version set on one side of a transfer. Rarely, after two
+  devices merged in turn, a device that had heard of neither records it late: it may then stay beside one changed on
+  another device, or come back after one was deleted there; delete it
 - Due plans are shown on the home screen
 - Reminders (Android): a notification on the day a plan falls due, or 1 or 3 days before, at the hour you choose,
   and for manual plans still waiting to be recorded; tapping it opens the plans. Turn them on in **Settings**.
