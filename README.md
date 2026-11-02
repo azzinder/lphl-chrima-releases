@@ -342,8 +342,8 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - Greek and English (follows the device language by default)
 - A full user guide in the app, in Greek and English (**More → User guide**): every feature, step by step, with a
   search through all of it, links between its sections, and questions and answers. It works offline
-- **More → Support Fasouli**: three ways to help with the cost of making it, the same as the LPHL site's support page
-  and Erevos: Liberapay, Monero and Bitcoin. Nothing is sent when the page opens: each way opens only when tapped, in
+- **More → Support Fasouli**: four ways to help with the cost of making it, the same as the LPHL site's support page:
+  Liberapay, PayPal, Monero and Bitcoin. Nothing is sent when the page opens: each way opens only when tapped, in
   the browser or a wallet app (`src/lib/support.ts` holds the link and the addresses). **Open in a wallet** is on
   phones only: the computer and SailfishOS versions pass on only web links, and the online page has no wallet app to
   hand one to, so there the address is selected and copied. Giving changes nothing in the app, which does not know who
