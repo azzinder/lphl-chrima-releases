@@ -702,7 +702,8 @@ Fasouli is free software: you can redistribute it and/or modify it under the ter
 Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version. It is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; see [LICENSE](LICENSE).
 Who makes Fasouli, the role of AI tools and the additional terms of section 7 of the licence (author attribution, marking
-changed versions, the name and logo) are in [AUTHORS.md](AUTHORS.md).
+changed versions, the name and logo) are in [AUTHORS.md](AUTHORS.md). The About text at the bottom of the More tab
+names the licence and opens AUTHORS.md and CREDITS.md in the public repository, **https://github.com/azzinder/lphl-chrima-releases**.
 Whoever runs a modified version for others over a network, such as the online version, must offer those users its
 source code.
 
