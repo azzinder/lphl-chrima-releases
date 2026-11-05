@@ -346,8 +346,9 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   Liberapay, PayPal, Monero and Bitcoin. Nothing is sent when the page opens: each way opens only when tapped, in
   the browser or a wallet app (`src/lib/support.ts` holds the link and the addresses). **Open in a wallet** is on
   phones only: the computer and SailfishOS versions pass on only web links, and the online page has no wallet app to
-  hand one to, so there the address is selected and copied. Giving changes nothing in the app, which does not know who
-  gave
+  hand one to, so there the address is selected and copied. Each way also shows a QR code, the same as on the site's
+  support page, drawn ahead of time (`src/lib/support-qr.ts`). Giving changes nothing in the app, which does not know
+  who gave
 - Three styles: Classic (teal, rounded), Modernist (red accent, square, Archivo type; Greek text uses
   Inter Tight because Archivo has no Greek letters) and Nocturne (the LPHL site's: always dark, deep blue with a
   lilac accent and a glow, Inter type). Classic and Modernist in light, dark or system theme.
