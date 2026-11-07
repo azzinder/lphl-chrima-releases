@@ -413,6 +413,20 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
   the password, and nothing in them tells the spaces apart); **Backup & data → Automatic backups** lists this space's
   and restores one. The six newest are kept. The online version is updated on its server instead
 
+**Erevos** (the private messenger by the same maker)
+- The bottom of **More** links to Erevos's download page (`src/lib/erevos.ts`), and so does the guide
+- **Remind me in Erevos** (Android): the bell beside a scheduled transaction in **Plans & templates** opens
+  `erevos://myself?note=…&due=…`, the plan's next reminder at the reminder time and days before; Erevos asks before
+  keeping it in its Chat with myself. The amount stays out while amounts are hidden behind the privacy PIN
+- **Ask for it in Erevos** (Android): an income transaction opens `erevos://pay?a=…&d=…&c=…&w=…&r=t<id>`, a payment
+  request Erevos sends to a contact as a card. When they mark it paid, the card's **Mark in Fasouli** opens
+  `lphlchrima://paid?r=t<id>` (`src/app/paid.tsx`): **Mark as paid** fills in the Collected amount, or clears the
+  transaction without second amounts (`markPaid`, `src/db/repo/transactions.ts`). Only the id is taken from the link
+- **Panic app** (Android, `modules/lphl-panic`): Fasouli is a PanicKit responder. A panic app, as Erevos (its **Tell
+  other apps**), asks with CONNECT, which opens `lphlchrima://panic` (`src/app/panic.tsx`) for the owner to allow it;
+  then its TRIGGER, from that app only (as Android names it, signed as when allowed), closes Fasouli so it opens again
+  only through its lock. Nothing is deleted but the cache, where exports wait in the clear (`Panic.close`)
+
 ## Online version (on your Nextcloud server)
 
 For when your phone is not at hand: open `https://your-site/lphl-chrima/` in any browser, sign in with Authentik, then
@@ -520,6 +534,22 @@ same version, even if a new one is published in between. Take the version from
 `release` (`3.0.<build>`) or `build`, not from `version`, which stays `1.0.<build>` for old apps. Install a new
 online version together with the apps: devices on an older version than the one that wrote the data leave out what
 they do not know (the sync screen of the newer devices says which device it is).
+
+## Website
+
+Fasouli's website (a home page and the user guide, in English and Greek) is built from the app itself: the guide is
+the one under **More → User guide** (`src/i18n/guide/`), the donation links, addresses and QR codes are those of
+**More → Support Fasouli** (`src/lib/support.ts`, `src/lib/support-qr.ts`). The home pages, the style and the
+pictures are in `docs/site/`. One command builds it into a folder:
+
+```bash
+python3 docs/site/build.py /path/to/fasouli-site
+```
+
+Only Python's standard library is needed. Every link inside the folder is relative and the pages run no script and load
+nothing from other sites, so the folder works at an address of its own or inside another site (as `/fasouli/` on the
+LPHL site). English is at the top of the folder, Greek under `el/`. Build it again after a change to the guide or to
+the support page. `docs/` is outside the app builds, so a change there alone starts none.
 
 ## Run it
 
