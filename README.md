@@ -417,7 +417,9 @@ The build history is under **Actions → Build**. Its jobs hand their files to t
 - The bottom of **More** links to Erevos's download page (`src/lib/erevos.ts`), and so does the guide
 - **Remind me in Erevos** (Android): the bell beside a scheduled transaction in **Plans & templates** opens
   `erevos://myself?note=…&due=…`, the plan's next reminder at the reminder time and days before; Erevos asks before
-  keeping it in its Chat with myself. The amount stays out while amounts are hidden behind the privacy PIN
+  keeping it in its Chat with myself. The amount stays out while amounts are hidden behind the privacy PIN. For a plan
+  with no end date the link adds `&every=1m` (as the plan repeats, `planEvery`), so Erevos reminds again each time, and
+  the note has no date
 - **Ask for it in Erevos** (Android): an income transaction opens `erevos://pay?a=…&d=…&c=…&w=…&r=t<id>`, a payment
   request Erevos sends to a contact as a card. When they mark it paid, the card's **Mark in Fasouli** opens
   `lphlchrima://paid?r=t<id>` (`src/app/paid.tsx`): **Mark as paid** fills in the Collected amount, or clears the
